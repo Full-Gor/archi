@@ -1,0 +1,419 @@
+</html><!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recherche - Aladine Atelier</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: black;
+            color: white;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .container {
+            position: relative;
+            min-height: 100vh;
+            width: 100%;
+            padding: 50px;
+            box-sizing: border-box;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+        }
+        
+        .logo a {
+            color: white;
+            text-decoration: none;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .navigation {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        
+        .navigation a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.75rem;
+            margin: 5px 0;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .navigation a:hover {
+            color: #d4af37;
+        }
+        
+        .navigation a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            right: 0;
+            background-color: #d4af37;
+            transition: width 0.3s ease;
+        }
+        
+        .navigation a:hover::after {
+            width: 100%;
+        }
+        
+        .navigation a.active {
+            color: #d4af37;
+        }
+        
+        .navigation a.active::after {
+            width: 100%;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+        
+        .search-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .search-form {
+            position: relative;
+            margin-bottom: 50px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            padding-right: 60px;
+            font-size: 1.2rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 5px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #d4af37;
+        }
+        
+        .search-button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: white;
+            transition: color 0.3s ease;
+        }
+        
+        .search-button:hover {
+            color: #d4af37;
+        }
+        
+        .search-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .category-button {
+            padding: 10px 20px;
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .category-button:hover, .category-button.active {
+            background-color: #d4af37;
+            border-color: #d4af37;
+            color: black;
+        }
+        
+        .search-results {
+            margin-top: 30px;
+            opacity: 0;
+            display: none;
+            transition: opacity 0.5s ease;
+        }
+        
+        .search-results.show {
+            opacity: 1;
+            display: block;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .results-count {
+            font-weight: bold;
+        }
+        
+        .sort-options {
+            display: flex;
+            align-items: center;
+        }
+        
+        .sort-label {
+            margin-right: 10px;
+        }
+        
+        .sort-select {
+            background-color: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+        }
+        
+        .sort-select:focus {
+            outline: none;
+            border-color: #d4af37;
+        }
+        
+        .result-card {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .result-category {
+            font-size: 0.8rem;
+            color: #d4af37;
+            margin-bottom: 5px;
+        }
+        
+        .result-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+        
+        .result-title a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .result-title a:hover {
+            color: #d4af37;
+        }
+        
+        .result-excerpt {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .result-meta {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .initial-content {
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        .initial-content p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .popular-searches {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .popular-search {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .popular-search:hover {
+            background: #d4af37;
+            color: black;
+        }
+
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <a href="index.html">Aladine Atelier</a>
+            </div>
+            <div class="navigation">
+                <a href="aladine.html">Aladine</a>
+                <a href="atelier.html">Atelier</a>
+                <a href="projets.html">Projets</a>
+                <a href="contact.html">Contact</a>
+                <a href="rejoindre.html">Nous rejoindre</a>
+                <a href="recherche.html" class="active">Rechercher</a>
+            </div>
+        </div>
+        
+        <h1>Recherche</h1>
+        
+        <div class="search-container">
+            <div class="search-form">
+                <input type="text" class="search-input" placeholder="Que recherchez-vous ?">
+                <button class="search-button">🔍</button>
+            </div>
+            
+            <div class="search-categories">
+                <button class="category-button active">Tout</button>
+                <button class="category-button">Projets</button>
+                <button class="category-button">Ateliers</button>
+                <button class="category-button">Équipe</button>
+                <button class="category-button">Publications</button>
+                <button class="category-button">Actualités</button>
+            </div>
+            
+            <div class="initial-content">
+                <p>Commencez votre recherche en utilisant le champ ci-dessus</p>
+                <div class="popular-searches">
+                    <div class="popular-search">Architecture durable</div>
+                    <div class="popular-search">Projets résidentiels</div>
+                    <div class="popular-search">Développement urbain</div>
+                    <div class="popular-search">Innovation</div>
+                    <div class="popular-search">Design d'intérieur</div>
+                    <div class="popular-search">Prix et distinctions</div>
+                </div>
+            </div>
+            
+            <div class="search-results">
+                <div class="results-header">
+                    <div class="results-count">23 résultats trouvés pour "architecture durable"</div>
+                    <div class="sort-options">
+                        <span class="sort-label">Trier par:</span>
+                        <select class="sort-select">
+                            <option value="relevance">Pertinence</option>
+                            <option value="date-desc">Date (récent)</option>
+                            <option value="date-asc">Date (ancien)</option>
+                            <option value="name">Alphabétique</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="result-card">
+                    <div class="result-category">Projet</div>
+                    <div class="result-title"><a href="projets.html">Harmonie Verticale - Tour résidentielle écologique à Singapour</a></div>
+                    <div class="result-excerpt">Une approche révolutionnaire de l'architecture durable en milieu urbain dense, intégrant des jardins suspendus et un système avancé de récupération d'eau de pluie.</div>
+                    <div class="result-meta">Publié le 15 mars 2023</div>
+                </div>
+                
+                <div class="result-card">
+                    <div class="result-category">Publication</div>
+                    <div class="result-title"><a href="#">Les principes fondamentaux de l'architecture durable selon Aladine</a></div>
+                    <div class="result-excerpt">Un article détaillant notre philosophie de conception intégrant les préoccupations environnementales, sociales et économiques dans chaque projet architectural.</div>
+                    <div class="result-meta">Publié le 28 novembre 2022</div>
+                </div>
+                
+                <div class="result-card">
+                    <div class="result-category">Projet</div>
+                    <div class="result-title"><a href="projets.html">Éco-Quartier Riviera - Barcelone, Espagne</a></div>
+                    <div class="result-excerpt">Un projet de réaménagement urbain axé sur la durabilité, transformant une ancienne zone industrielle en un quartier résidentiel écologique et autosuffisant.</div>
+                    <div class="result-meta">Publié le 5 juin 2017</div>
+                </div>
+                
+                <div class="result-card">
+                    <div class="result-category">Équipe</div>
+                    <div class="result-title"><a href="rejoindre.html">Offre d'emploi : Architecte Spécialiste en Durabilité - Singapour</a></div>
+                    <div class="result-excerpt">Nous recherchons un architecte spécialisé en conception durable pour renforcer notre équipe à Singapour et apporter son expertise en matière de construction écologique.</div>
+                    <div class="result-meta">Publié le 10 janvier 2023</div>
+                </div>
+                
+                <div class="result-card">
+                    <div class="result-category">Actualité</div>
+                    <div class="result-title"><a href="#">Aladine reçoit le Prix International d'Architecture Durable 2022</a></div>
+                    <div class="result-excerpt">Notre cabinet a été récompensé pour son engagement continu envers les pratiques de conception durable et son impact positif sur l'environnement bâti.</div>
+                    <div class="result-meta">Publié le 12 décembre 2022</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.querySelector('.search-input');
+            const searchButton = document.querySelector('.search-button');
+            const initialContent = document.querySelector('.initial-content');
+            const searchResults = document.querySelector('.search-results');
+            const popularSearches = document.querySelectorAll('.popular-search');
+            const categoryButtons = document.querySelectorAll('.category-button');
+            
+            // Fonction pour afficher les résultats de recherche
+            function showSearchResults() {
+                initialContent.style.display = 'none';
+                searchResults.classList.add('show');
+            }
+            
+            // Événement pour le bouton de recherche
+            searchButton.addEventListener('click', function() {
+                if (searchInput.value.trim() !== '') {
+                    showSearchResults();
+                }
+            });
+            
+            // Événement pour la touche Entrée dans le champ de recherche
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && searchInput.value.trim() !== '') {
+                    showSearchResults();
+                }
+            });
+            
+            // Événement pour les recherches populaires
+            popularSearches.forEach(function(search) {
+                search.addEventListener('click', function() {
+                    searchInput.value = search.textContent;
+                    showSearchResults();
+                });
+            });
+            
+            // Événement pour les boutons de catégories
+            categoryButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    if (searchResults.classList.contains('show')) {
+                        // Simuler un filtrage des résultats par catégorie
+                        // Dans une implémentation réelle, cela rechargerait les résultats
+                    }
+                });
+            });
+        });
+    </script>
+</body>

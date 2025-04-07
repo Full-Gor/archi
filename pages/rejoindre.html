@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nous Rejoindre - Aladine Atelier</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: black;
+            color: white;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .container {
+            position: relative;
+            min-height: 100vh;
+            width: 100%;
+            padding: 50px;
+            box-sizing: border-box;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+        }
+        
+        .logo a {
+            color: white;
+            text-decoration: none;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .navigation {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        
+        .navigation a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.75rem;
+            margin: 5px 0;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .navigation a:hover {
+            color: #d4af37;
+        }
+        
+        .navigation a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            right: 0;
+            background-color: #d4af37;
+            transition: width 0.3s ease;
+        }
+        
+        .navigation a:hover::after {
+            width: 100%;
+        }
+        
+        .navigation a.active {
+            color: #d4af37;
+        }
+        
+        .navigation a.active::after {
+            width: 100%;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+        
+        .join-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 50px;
+        }
+        
+        .join-info {
+            flex: 1;
+            min-width: 300px;
+            max-width: 600px;
+        }
+        
+        .join-info p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .values {
+            margin-top: 40px;
+        }
+        
+        .values h2 {
+            font-size: 1.8rem;
+            color: #d4af37;
+            margin-bottom: 20px;
+        }
+        
+        .value-item {
+            margin-bottom: 25px;
+        }
+        
+        .value-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .job-listings {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .job-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 3px solid #d4af37;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        
+        .job-card:hover {
+            transform: translateY(-5px);
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+        
+        .job-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #d4af37;
+        }
+        
+        .job-location {
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+        
+        .job-type {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: rgba(212, 175, 55, 0.2);
+            border-radius: 3px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .job-description {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .apply-btn {
+            display: inline-block;
+            background-color: #d4af37;
+            color: black;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        
+        .apply-btn:hover {
+            background-color: #e5c158;
+        }
+        
+        .spontaneous-application {
+            margin-top: 50px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            padding: 25px;
+        }
+        
+        .spontaneous-application h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #d4af37;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <a href="index.html">Aladine Atelier</a>
+            </div>
+            <div class="navigation">
+                <a href="aladine.html">Aladine</a>
+                <a href="atelier.html">Atelier</a>
+                <a href="projets.html">Projets</a>
+                <a href="contact.html">Contact</a>
+                <a href="rejoindre.html" class="active">Nous rejoindre</a>
+                <a href="recherche.html">Rechercher</a>
+            </div>
+        </div>
+        
+        <h1>Rejoignez Notre Équipe</h1>
+        
+        <div class="join-container">
+            <div class="join-info">
+                <p>Aladine Atelier est toujours à la recherche de talents exceptionnels et passionnés pour rejoindre notre équipe créative internationale. Nous croyons que la diversité des perspectives et des expériences est essentielle à l'innovation et à l'excellence dans notre travail.</p>
+                
+                <p>En rejoignant Aladine Atelier, vous ferez partie d'une communauté dynamique d'architectes, de designers et de penseurs créatifs dévoués à repousser les limites de ce qui est possible dans l'architecture contemporaine.</p>
+                
+                <div class="values">
+                    <h2>Nos Valeurs</h2>
+                    
+                    <div class="value-item">
+                        <div class="value-title">Excellence Créative</div>
+                        <p>Nous nous efforçons constamment de repousser les frontières de la conception et d'explorer de nouvelles idées audacieuses. L'innovation est au cœur de notre approche.</p>
+                    </div>
+                    
+                    <div class="value-item">
+                        <div class="value-title">Durabilité Environnementale</div>
+                        <p>Nous sommes déterminés à créer des espaces qui s'harmonisent avec leur environnement et contribuent positivement à l'avenir de notre planète.</p>
+                    </div>
+                    
+                    <div class="value-item">
+                        <div class="value-title">Collaboration Sans Frontières</div>
+                        <p>Nous croyons que les meilleures idées naissent de la collaboration entre des perspectives diverses. Chaque voix compte dans notre processus de conception.</p>
+                    </div>
+                    
+                    <div class="value-item">
+                        <div class="value-title">Impact Positif</div>
+                        <p>Notre objectif ultime est de créer des espaces qui améliorent la vie des personnes qui les utilisent et des communautés qui les entourent.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="job-listings">
+                <div class="job-card">
+                    <div class="job-title">Architecte Senior</div>
+                    <div class="job-location">Paris, France</div>
+                    <div class="job-type">Temps plein</div>
+                    <div class="job-description">
+                        Nous recherchons un architecte senior avec au moins 8 ans d'expérience pour rejoindre notre équipe à Paris. Vous dirigerez des projets prestigieux et superviserez une équipe de concepteurs talentueux.
+                    </div>
+                    <a href="#" class="apply-btn">Postuler</a>
+                </div>
+                
+                <div class="job-card">
+                    <div class="job-title">Designer d'Intérieur</div>
+                    <div class="job-location">Tokyo, Japon</div>
+                    <div class="job-type">Temps plein</div>
+                    <div class="job-description">
+                        Nous recherchons un designer d'intérieur créatif et expérimenté pour intégrer notre équipe à Tokyo. Vous travaillerez sur des projets résidentiels et commerciaux haut de gamme.
+                    </div>
+                    <a href="#" class="apply-btn">Postuler</a>
+                </div>
+                
+                <div class="job-card">
+                    <div class="job-title">Chef de Projet Architecture</div>
+                    <div class="job-location">New York, États-Unis</div>
+                    <div class="job-type">Temps plein</div>
+                    <div class="job-description">
+                        Nous recherchons un chef de projet expérimenté pour coordonner nos projets institutionnels à New York. Vous serez le point de contact principal pour les clients et les équipes de construction.
+                    </div>
+                    <a href="#" class="apply-btn">Postuler</a>
+                </div>
+                
+                <div class="job-card">
+                    <div class="job-title">Architecte Spécialiste en Durabilité</div>
+                    <div class="job-location">Singapour</div>
+                    <div class="job-type">Temps plein</div>
+                    <div class="job-description">
+                        Nous recherchons un architecte spécialisé en conception durable pour renforcer notre équipe à Singapour. Vous apporterez votre expertise en matière de construction écologique et de certification environnementale.
+                    </div>
+                    <a href="#" class="apply-btn">Postuler</a>
+                </div>
+                
+                <div class="job-card">
+                    <div class="job-title">Architecte Junior</div>
+                    <div class="job-location">Le Cap, Afrique du Sud</div>
+                    <div class="job-type">Temps plein</div>
+                    <div class="job-description">
+                        Nous recherchons un architecte junior passionné pour rejoindre notre équipe au Cap. Vous aurez l'occasion de travailler sur des projets communautaires innovants et d'apprendre auprès de mentors expérimentés.
+                    </div>
+                    <a href="#" class="apply-btn">Postuler</a>
+                </div>
+                
+                <div class="spontaneous-application">
+                    <h3>Candidature Spontanée</h3>
+                    <p>Vous ne trouvez pas de poste correspondant à votre profil ? Nous sommes toujours intéressés par les talents exceptionnels. Envoyez-nous votre CV et portfolio à <a href="mailto:careers@aladine-atelier.com">careers@aladine-atelier.com</a> en précisant le type de poste et le bureau qui vous intéressent.</p>
+                    <a href="#" class="apply-btn">Envoyer une candidature spontanée</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

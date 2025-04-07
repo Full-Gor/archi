@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aladine Atelier</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: black;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+        
+        .container {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+        }
+        
+        .title {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            font-size: 3rem;
+            z-index: 10;
+            opacity: 0;
+            animation: fadeIn 5s ease-in forwards;
+        }
+        
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            20% { opacity: 0.1; }
+            40% { opacity: 0.3; }
+            60% { opacity: 0.5; }
+            80% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+        
+        .image-slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0;
+            animation: fadeIn 2s forwards 2s;
+        }
+        
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-position: center;
+            background-size: cover;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+        
+        .slide.active {
+            opacity: 1;
+        }
+        
+        .navigation {
+            position: absolute;
+            bottom: 50px;
+            right: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            z-index: 10;
+            opacity: 0;
+            animation: fadeIn 2s forwards 1s;
+        }
+        
+        .navigation a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.75rem;
+            margin: 5px 0;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .navigation a:hover {
+            color: #d4af37;
+        }
+        
+        .navigation a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            right: 0;
+            background-color: #d4af37;
+            transition: width 0.3s ease;
+        }
+        
+        .navigation a:hover::after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Aladine Atelier</h1>
+        
+        <div class="image-slider">
+            <div class="slide active" style="background-image: url('/img/photo1.jpg');"></div>
+            <div class="slide" style="background-image: url('/img/photo2.jpg');"></div>
+            <div class="slide" style="background-image: url('/img/photo3.jpg');"></div>
+            <div class="slide" style="background-image: url('/img/photo4.jpg');"></div>
+            <div class="slide" style="background-image: url('/img/photo5.jpg');"></div>
+        </div>
+        
+        <div class="navigation">
+            <a href="/pages/aladine.html">Aladine</a>
+            <a href="/pages/atelier.html">Atelier</a>
+            <a href="/pages/projet.html">Projets</a>
+            <a href="/pages/contact.html">Contact</a>
+            <a href="/pages/rejoindre.html">Nous rejoindre</a>
+            <a href="/pages/recherche.html">Rechercher</a>
+        </div>
+    </div>
+    
+    <script>
+        // Attendre que le document soit complètement chargé
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sélectionner tous les éléments avec la classe 'slide'
+            const slides = document.querySelectorAll('.slide');
+            let currentSlide = 0;
+            
+            // Fonction pour afficher un slide spécifique
+            function showSlide(index) {
+                // Retirer la classe 'active' de tous les slides
+                slides.forEach(slide => slide.classList.remove('active'));
+                // Ajouter la classe 'active' au slide sélectionné
+                slides[index].classList.add('active');
+            }
+            
+            // Fonction pour passer au slide suivant
+            function nextSlide() {
+                // Calculer l'index du prochain slide (avec boucle)
+                currentSlide = (currentSlide + 1) % slides.length;
+                // Afficher le prochain slide
+                showSlide(currentSlide);
+            }
+            
+            // Démarrer le défilement automatique (toutes les 2 secondes)
+            setInterval(nextSlide, 2000);
+            
+            // Afficher le premier slide au chargement
+            showSlide(0);
+        });
+    </script>
+</body>
+</html>

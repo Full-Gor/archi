@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aladine - Aladine Atelier</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: black;
+            color: white;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .container {
+            position: relative;
+            min-height: 100vh;
+            width: 100%;
+            padding: 50px;
+            box-sizing: border-box;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+        }
+        
+        .logo a {
+            color: white;
+            text-decoration: none;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .navigation {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        
+        .navigation a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.75rem;
+            margin: 5px 0;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .navigation a:hover {
+            color: #d4af37;
+        }
+        
+        .navigation a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            right: 0;
+            background-color: #d4af37;
+            transition: width 0.3s ease;
+        }
+        
+        .navigation a:hover::after {
+            width: 100%;
+        }
+        
+        .navigation a.active {
+            color: #d4af37;
+        }
+        
+        .navigation a.active::after {
+            width: 100%;
+        }
+        
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 50px;
+        }
+        
+        .bio {
+            flex: 1;
+            min-width: 300px;
+            margin-right: 50px;
+        }
+        
+        .profile {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .profile-image {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            color: #d4af37;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .achievements {
+            margin-top: 50px;
+        }
+        
+        .achievement {
+            margin-bottom: 30px;
+        }
+        
+        .achievement-year {
+            font-weight: bold;
+            color: #d4af37;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <a href="index.html">Aladine Atelier</a>
+            </div>
+            <div class="navigation">
+                <a href="aladine.html" class="active">Aladine</a>
+                <a href="atelier.html">Atelier</a>
+                <a href="projets.html">Projets</a>
+                <a href="contact.html">Contact</a>
+                <a href="rejoindre.html">Nous rejoindre</a>
+                <a href="recherche.html">Rechercher</a>
+            </div>
+        </div>
+        
+        <h1>Aladine</h1>
+        
+        <div class="content">
+            <div class="bio">
+                <p>Fondateur et visionnaire derrière Aladine Atelier, Aladine Mahmoud est un architecte internationalement reconnu dont le travail transcende les conventions traditionnelles de l'architecture.</p>
+                
+                <p>Né à Beyrouth et formé à l'École Spéciale d'Architecture de Paris, Aladine a développé une approche unique qui marie l'esthétique contemporaine avec les principes durables et les influences culturelles diverses.</p>
+                
+                <p>Sa philosophie de design s'articule autour de trois principes fondamentaux : la durabilité environnementale, l'intégration culturelle et l'innovation technique. Chacun de ses projets raconte une histoire unique, créant un dialogue entre l'espace, l'environnement et les personnes qui l'habitent.</p>
+                
+                <div class="achievements">
+                    <h2>Distinctions</h2>
+                    
+                    <div class="achievement">
+                        <div class="achievement-year">2023</div>
+                        <div>Prix Pritzker d'Architecture - Nomination</div>
+                    </div>
+                    
+                    <div class="achievement">
+                        <div class="achievement-year">2021</div>
+                        <div>Médaille d'Or de l'Académie d'Architecture</div>
+                    </div>
+                    
+                    <div class="achievement">
+                        <div class="achievement-year">2019</div>
+                        <div>Grand Prix AFEX de l'Architecture Française à l'Export</div>
+                    </div>
+                    
+                    <div class="achievement">
+                        <div class="achievement-year">2016</div>
+                        <div>Prix Aga Khan d'Architecture</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile">
+                <img src="/api/placeholder/500/600" alt="Portrait d'Aladine" class="profile-image">
+                
+                <h2>Vision</h2>
+                <p>"L'architecture n'est pas simplement l'art de construire des bâtiments, c'est l'art de créer des expériences, de façonner des émotions et de laisser un impact durable sur le monde qui nous entoure. Chaque projet est une opportunité de redéfinir notre relation à l'espace et à l'environnement."</p>
+                
+                <p>"Je crois fermement que l'architecture a le pouvoir de transformer positivement la vie des gens, de catalyser le changement social et de contribuer à un avenir plus durable pour notre planète."</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

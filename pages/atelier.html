@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atelier - Aladine Atelier</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: black;
+            color: white;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .container {
+            position: relative;
+            min-height: 100vh;
+            width: 100%;
+            padding: 50px;
+            box-sizing: border-box;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+        }
+        
+        .logo a {
+            color: white;
+            text-decoration: none;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .navigation {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        
+        .navigation a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.75rem;
+            margin: 5px 0;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .navigation a:hover {
+            color: #d4af37;
+        }
+        
+        .navigation a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            right: 0;
+            background-color: #d4af37;
+            transition: width 0.3s ease;
+        }
+        
+        .navigation a:hover::after {
+            width: 100%;
+        }
+        
+        .navigation a.active {
+            color: #d4af37;
+        }
+        
+        .navigation a.active::after {
+            width: 100%;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+        
+        .introduction {
+            max-width: 800px;
+            margin-bottom: 50px;
+        }
+        
+        p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .studios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .studio-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .studio-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .studio-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .studio-info {
+            padding: 20px;
+        }
+        
+        .studio-city {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #d4af37;
+        }
+        
+        .studio-address {
+            margin-bottom: 15px;
+            font-style: italic;
+            opacity: 0.8;
+        }
+        
+        .studio-description {
+            margin-bottom: 15px;
+        }
+        
+        .team-size {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+        
+        .world-map {
+            margin-top: 70px;
+            text-align: center;
+        }
+        
+        .world-map h2 {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: #d4af37;
+        }
+        
+        .map-image {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <a href="index.html">Aladine Atelier</a>
+            </div>
+            <div class="navigation">
+                <a href="aladine.html">Aladine</a>
+                <a href="atelier.html" class="active">Atelier</a>
+                <a href="projets.html">Projets</a>
+                <a href="contact.html">Contact</a>
+                <a href="rejoindre.html">Nous rejoindre</a>
+                <a href="recherche.html">Rechercher</a>
+            </div>
+        </div>
+        
+        <h1>Nos Ateliers à Travers le Monde</h1>
+        
+        <div class="introduction">
+            <p>Aladine Atelier est un réseau mondial de studios d'architecture et de design, réunissant des talents créatifs aux expériences et horizons divers. Notre structure internationale nous permet d'aborder chaque projet avec une perspective globale tout en apportant une compréhension locale approfondie.</p>
+            <p>Chacun de nos ateliers possède sa propre identité et expertise, tout en partageant la même philosophie et les mêmes valeurs fondamentales qui définissent Aladine Atelier.</p>
+        </div>
+        
+        <div class="studios-grid">
+            <div class="studio-card">
+                <img src="/api/placeholder/400/200" alt="Studio Paris" class="studio-image">
+                <div class="studio-info">
+                    <div class="studio-city">Paris</div>
+                    <div class="studio-address">16 Rue des Beaux-Arts, 75006 Paris, France</div>
+                    <div class="studio-description">Notre siège historique, établi en 2005, est le centre névralgique de notre réseau mondial et abrite notre principale équipe de conception.</div>
+                    <div class="team-size">Équipe: 45 architectes et designers</div>
+                </div>
+            </div>
+            
+            <div class="studio-card">
+                <img src="/api/placeholder/400/200" alt="Studio Tokyo" class="studio-image">
+                <div class="studio-info">
+                    <div class="studio-city">Tokyo</div>
+                    <div class="studio-address">2-1-3 Minami-Aoyama, Minato-ku, Tokyo, Japon</div>
+                    <div class="studio-description">Notre studio de Tokyo, inauguré en 2012, se spécialise dans l'innovation technologique et la durabilité en milieu urbain dense.</div>
+                    <div class="team-size">Équipe: 28 architectes et designers</div>
+                </div>
+            </div>
+            
+            <div class="studio-card">
+                <img src="/api/placeholder/400/200" alt="Studio New York" class="studio-image">
+                <div class="studio-info">
+                    <div class="studio-city">New York</div>
+                    <div class="studio-address">175 Varick Street, New York, NY 10014, USA</div>
+                    <div class="studio-description">Notre présence nord-américaine, établie en 2010, se concentre sur les projets institutionnels et les complexes culturels.</div>
+                    <div class="team-size">Équipe: 32 architectes et designers</div>
+                </div>
+            </div>
+            
+            <div class="studio-card">
+                <img src="/api/placeholder/400/200" alt="Studio Dubai" class="studio-image">
+                <div class="studio-info">
+                    <div class="studio-city">Dubaï</div>
+                    <div class="studio-address">Dubai Design District, Building 7, UAE</div>
+                    <div class="studio-description">Notre atelier du Moyen-Orient, fondé en 2015, excelle dans les projets à grande échelle et l'architecture durable en climat désertique.</div>
+                    <div class="team-size">Équipe: 25 architectes et designers</div>
+                </div>
+            </div>
+            
+            <div class="studio-card">
+                <img src="/api/placeholder/400/200" alt="Studio Singapour" class="studio-image">
+                <div class="studio-info">
+                    <div class="studio-city">Singapour</div>
+                    <div class="studio-address">40 Tras Street, Singapour 078979</div>
+                    <div class="studio-description">Notre hub asiatique, créé en 2018, se spécialise dans l'architecture tropicale durable et les projets résidentiels innovants.</div>
+                    <div class="team-size">Équipe: 20 architectes et designers</div>
+                </div>
+            </div>
+            
+            <div class="studio-card">
+                <img src="/api/placeholder/400/200" alt="Studio Cape Town" class="studio-image">
+                <div class="studio-info">
+                    <div class="studio-city">Le Cap</div>
+                    <div class="studio-address">Woodstock Exchange, 66 Albert Road, Le Cap, Afrique du Sud</div>
+                    <div class="studio-description">Notre présence africaine, établie en 2019, se concentre sur les projets communautaires et l'architecture contextuelle.</div>
+                    <div class="team-size">Équipe: 15 architectes et designers</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="world-map">
+            <h2>Notre Présence Mondiale</h2>
+            <img src="/api/placeholder/1000/500" alt="Carte du monde avec les emplacements des studios" class="map-image">
+        </div>
+    </div>
+</body>
+</html>
