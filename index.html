@@ -3,8 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aladine Atelier</title>
+    <title>Deen Designer | Aladine Atelier</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body, html {
             margin: 0;
             padding: 0;
@@ -14,13 +20,209 @@
             font-family: 'Arial', sans-serif;
             overflow: hidden;
         }
-        
-        .container {
-            position: relative;
+
+        /* Loader Page Styles */
+        .loader-container {
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            z-index: 1000;
+            background-color: black;
+            transition: opacity 1.5s ease-out, transform 0.5s ease-out;
+        }
+
+        .smoke-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+            background-color: black;
+        }
+
+        .smoke-layer {
+            position: absolute;
             height: 100vh;
             width: 100%;
+            opacity: 0;
+            mix-blend-mode: screen;
+            pointer-events: none;
         }
-        
+
+        .smoke-1 {
+            background: radial-gradient(circle at center, rgba(255,255,255,0.9) 0%, transparent 60%);
+            animation: smokeEffect1 8s ease-out forwards;
+            transform-origin: center center;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+        }
+
+        .smoke-2 {
+            background: radial-gradient(ellipse at center, rgba(255,255,255,0.8) 0%, transparent 50%);
+            animation: smokeEffect2 10s ease-out forwards;
+            animation-delay: 1s;
+            transform-origin: center center;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 85%;
+        }
+
+        .smoke-3 {
+            background: radial-gradient(circle at center, rgba(255,255,255,0.7) 0%, transparent 40%);
+            animation: smokeEffect3 12s ease-out forwards;
+            animation-delay: 2s;
+            transform-origin: center center;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+        }
+
+        .smoke-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-image: url('https://images.unsplash.com/photo-1567095761054-7a02e69e5c43?auto=format&fit=crop&w=2000&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            mix-blend-mode: screen;
+            animation: particlesDrift 15s ease-in-out forwards;
+        }
+
+        .title-container {
+            position: relative;
+            z-index: 20;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0.8) translateY(20px);
+            animation: showTitle 3s ease-out forwards;
+            animation-delay: 2s;
+            padding: 0 20px;
+        }
+
+        .loader-title {
+            color: white;
+            font-size: clamp(2rem, 10vw, 5rem);
+            font-weight: bold;
+            letter-spacing: 0.2em;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            font-family: Arial, sans-serif;
+            text-align: center;
+            word-wrap: break-word;
+            max-width: 100%;
+        }
+
+        @keyframes smokeEffect1 {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(100%) scale(0.8);
+                filter: blur(5px);
+            }
+            20% {
+                opacity: 0.6;
+            }
+            50% {
+                opacity: 0.4;
+                transform: translateX(-50%) translateY(-30%) scale(1.5);
+                filter: blur(10px);
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-50%) scale(2);
+                filter: blur(15px);
+            }
+        }
+
+        @keyframes smokeEffect2 {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(100%) scale(1);
+                filter: blur(8px);
+            }
+            25% {
+                opacity: 0.5;
+            }
+            60% {
+                opacity: 0.3;
+                transform: translateX(-50%) translateY(-40%) scale(1.8);
+                filter: blur(12px);
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-60%) scale(2.2);
+                filter: blur(18px);
+            }
+        }
+
+        @keyframes smokeEffect3 {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(100%) scale(1.2);
+                filter: blur(10px);
+            }
+            30% {
+                opacity: 0.4;
+            }
+            70% {
+                opacity: 0.2;
+                transform: translateX(-50%) translateY(-50%) scale(2);
+                filter: blur(15px);
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-70%) scale(2.4);
+                filter: blur(20px);
+            }
+        }
+
+        @keyframes particlesDrift {
+            0% {
+                opacity: 0.15;
+                transform: translateX(-50%) translateY(0) scale(1.2);
+                filter: blur(8px);
+            }
+            50% {
+                opacity: 0.1;
+                transform: translateX(-50%) translateY(-10%) scale(1.4);
+                filter: blur(12px);
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-15%) scale(1.6);
+                filter: blur(15px);
+            }
+        }
+
+        @keyframes showTitle {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* Main Page Styles */
+        .main-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100%;
+            opacity: 0;
+            z-index: 1;
+            transition: opacity 2s ease-in-out;
+        }
+
         .title {
             position: absolute;
             top: 50px;
@@ -29,6 +231,7 @@
             z-index: 10;
             opacity: 0;
             animation: fadeIn 5s ease-in forwards;
+            animation-play-state: paused;
         }
         
         @keyframes fadeIn {
@@ -47,8 +250,6 @@
             width: 100%;
             height: 100%;
             z-index: 1;
-            opacity: 0;
-            animation: fadeIn 2s forwards 2s;
         }
         
         .slide {
@@ -76,7 +277,8 @@
             align-items: flex-end;
             z-index: 10;
             opacity: 0;
-            animation: fadeIn 2s forwards 1s;
+            animation: fadeIn 2s forwards;
+            animation-play-state: paused;
         }
         
         .navigation a {
@@ -106,10 +308,45 @@
         .navigation a:hover::after {
             width: 100%;
         }
+
+        @media (max-width: 768px) {
+            .smoke-1, .smoke-2, .smoke-3 {
+                width: 100%;
+            }
+
+            .loader-title {
+                letter-spacing: 0.15em;
+            }
+            
+            .title {
+                left: 20px;
+                top: 20px;
+                font-size: 2rem;
+            }
+            
+            .navigation {
+                right: 20px;
+                bottom: 20px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- Loader Page -->
+    <div class="loader-container" id="loader">
+        <div class="smoke-container">
+            <div class="smoke-layer smoke-1"></div>
+            <div class="smoke-layer smoke-2"></div>
+            <div class="smoke-layer smoke-3"></div>
+            <div class="smoke-particles"></div>
+        </div>
+        <div class="title-container">
+            <h1 class="loader-title">ALADINE ATELIER</h1>
+        </div>
+    </div>
+    
+    <!-- Main Page -->
+    <div class="main-container" id="main-content">
         <h1 class="title">Aladine Atelier</h1>
         
         <div class="image-slider">
@@ -121,42 +358,62 @@
         </div>
         
         <div class="navigation">
-            <a href="/pages/aladine.html">Aladine</a>
-            <a href="/pages/atelier.html">Atelier</a>
-            <a href="/pages/projet.html">Projets</a>
-            <a href="/pages/contact.html">Contact</a>
-            <a href="/pages/rejoindre.html">Nous rejoindre</a>
-            <a href="/pages/recherche.html">Rechercher</a>
+            <a href="#">Aladine</a>
+            <a href="#">Atelier</a>
+            <a href="#">Projets</a>
+            <a href="#">Contact</a>
+            <a href="#">Nous rejoindre</a>
+            <a href="#">Rechercher</a>
         </div>
     </div>
     
     <script>
-        // Attendre que le document soit complètement chargé
         document.addEventListener('DOMContentLoaded', function() {
-            // Sélectionner tous les éléments avec la classe 'slide'
+            // Loader transition timing
+            const loaderDuration = 6500; // 6.5 seconds
+            const loader = document.getElementById('loader');
+            const mainContent = document.getElementById('main-content');
+            
+            // Title and navigation animations
+            const title = document.querySelector('.title');
+            const navigation = document.querySelector('.navigation');
+            
+            // Transition from loader to main content
+            setTimeout(function() {
+                loader.style.opacity = '0';
+                loader.style.transform = 'translateY(-20px)';
+                mainContent.style.opacity = '1';
+                
+                // Start animations for main content
+                title.style.animationPlayState = 'running';
+                navigation.style.animationPlayState = 'running';
+                
+                // Remove loader after transition completes
+                setTimeout(function() {
+                    loader.style.display = 'none';
+                }, 1500);
+            }, loaderDuration);
+            
+            // Image slider functionality
             const slides = document.querySelectorAll('.slide');
             let currentSlide = 0;
             
-            // Fonction pour afficher un slide spécifique
             function showSlide(index) {
-                // Retirer la classe 'active' de tous les slides
                 slides.forEach(slide => slide.classList.remove('active'));
-                // Ajouter la classe 'active' au slide sélectionné
                 slides[index].classList.add('active');
             }
             
-            // Fonction pour passer au slide suivant
             function nextSlide() {
-                // Calculer l'index du prochain slide (avec boucle)
                 currentSlide = (currentSlide + 1) % slides.length;
-                // Afficher le prochain slide
                 showSlide(currentSlide);
             }
             
-            // Démarrer le défilement automatique (toutes les 2 secondes)
-            setInterval(nextSlide, 2000);
+            // Only start the slider when the main content is visible
+            setTimeout(function() {
+                setInterval(nextSlide, 4000);
+            }, loaderDuration + 500);
             
-            // Afficher le premier slide au chargement
+            // Show first slide initially
             showSlide(0);
         });
     </script>
