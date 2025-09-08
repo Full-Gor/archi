@@ -4,6 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deen Designer | Aladine Atelier</title>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-storage-compat.js"></script>
+    <!-- Google Fonts pour styles variés -->
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Megrim&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Barcode+39+Text&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+    
     <style>
         * {
             margin: 0;
@@ -21,76 +38,44 @@
             overflow: hidden;
         }
 
-        /* Loader Page Styles */
+        /* Simplified Smoke Animation for Better Performance */
         .loader-container {
             position: fixed;
             width: 100%;
             height: 100vh;
             overflow: hidden;
             z-index: 1000;
-            background-color: black;
-            transition: opacity 1.5s ease-out, transform 0.5s ease-out;
+            background: linear-gradient(to top, #222 0%, #000 100%);
+            transition: opacity 1s ease-out;
         }
 
-        .smoke-container {
+        .smoke-effect {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 1;
-            background-color: black;
-        }
-
-        .smoke-layer {
-            position: absolute;
-            height: 100vh;
-            width: 100%;
-            opacity: 0;
-            mix-blend-mode: screen;
-            pointer-events: none;
-        }
-
-        .smoke-1 {
-            background: radial-gradient(circle at center, rgba(255,255,255,0.9) 0%, transparent 60%);
-            animation: smokeEffect1 8s ease-out forwards;
-            transform-origin: center center;
+            bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 90%;
+            width: 200%;
+            height: 150%;
+            background: radial-gradient(ellipse at center bottom, 
+                rgba(255, 255, 255, 0.3) 0%, 
+                rgba(255, 255, 255, 0.1) 30%,
+                transparent 70%);
+            animation: smokeRise 6s ease-out forwards;
+            will-change: transform, opacity;
         }
 
-        .smoke-2 {
-            background: radial-gradient(ellipse at center, rgba(255,255,255,0.8) 0%, transparent 50%);
-            animation: smokeEffect2 10s ease-out forwards;
-            animation-delay: 1s;
-            transform-origin: center center;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 85%;
-        }
-
-        .smoke-3 {
-            background: radial-gradient(circle at center, rgba(255,255,255,0.7) 0%, transparent 40%);
-            animation: smokeEffect3 12s ease-out forwards;
-            animation-delay: 2s;
-            transform-origin: center center;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80%;
-        }
-
-        .smoke-particles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background-image: url('https://images.unsplash.com/photo-1567095761054-7a02e69e5c43?auto=format&fit=crop&w=2000&q=80');
-            background-size: cover;
-            background-position: center;
-            opacity: 0.15;
-            mix-blend-mode: screen;
-            animation: particlesDrift 15s ease-in-out forwards;
+        @keyframes smokeRise {
+            0% {
+                transform: translateX(-50%) translateY(50%) scale(0.5);
+                opacity: 0;
+            }
+            30% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateX(-50%) translateY(-30%) scale(1.5);
+                opacity: 0;
+            }
         }
 
         .title-container {
@@ -101,9 +86,8 @@
             align-items: center;
             justify-content: center;
             opacity: 0;
-            transform: scale(0.8) translateY(20px);
-            animation: showTitle 3s ease-out forwards;
-            animation-delay: 2s;
+            animation: fadeInTitle 2s ease-out forwards;
+            animation-delay: 1s;
             padding: 0 20px;
         }
 
@@ -113,101 +97,12 @@
             font-weight: bold;
             letter-spacing: 0.2em;
             text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-            font-family: Arial, sans-serif;
             text-align: center;
-            word-wrap: break-word;
-            max-width: 100%;
         }
 
-        @keyframes smokeEffect1 {
-            0% {
-                opacity: 0;
-                transform: translateX(-50%) translateY(100%) scale(0.8);
-                filter: blur(5px);
-            }
-            20% {
-                opacity: 0.6;
-            }
-            50% {
-                opacity: 0.4;
-                transform: translateX(-50%) translateY(-30%) scale(1.5);
-                filter: blur(10px);
-            }
-            100% {
-                opacity: 0;
-                transform: translateX(-50%) translateY(-50%) scale(2);
-                filter: blur(15px);
-            }
-        }
-
-        @keyframes smokeEffect2 {
-            0% {
-                opacity: 0;
-                transform: translateX(-50%) translateY(100%) scale(1);
-                filter: blur(8px);
-            }
-            25% {
-                opacity: 0.5;
-            }
-            60% {
-                opacity: 0.3;
-                transform: translateX(-50%) translateY(-40%) scale(1.8);
-                filter: blur(12px);
-            }
-            100% {
-                opacity: 0;
-                transform: translateX(-50%) translateY(-60%) scale(2.2);
-                filter: blur(18px);
-            }
-        }
-
-        @keyframes smokeEffect3 {
-            0% {
-                opacity: 0;
-                transform: translateX(-50%) translateY(100%) scale(1.2);
-                filter: blur(10px);
-            }
-            30% {
-                opacity: 0.4;
-            }
-            70% {
-                opacity: 0.2;
-                transform: translateX(-50%) translateY(-50%) scale(2);
-                filter: blur(15px);
-            }
-            100% {
-                opacity: 0;
-                transform: translateX(-50%) translateY(-70%) scale(2.4);
-                filter: blur(20px);
-            }
-        }
-
-        @keyframes particlesDrift {
-            0% {
-                opacity: 0.15;
-                transform: translateX(-50%) translateY(0) scale(1.2);
-                filter: blur(8px);
-            }
-            50% {
-                opacity: 0.1;
-                transform: translateX(-50%) translateY(-10%) scale(1.4);
-                filter: blur(12px);
-            }
-            100% {
-                opacity: 0;
-                transform: translateX(-50%) translateY(-15%) scale(1.6);
-                filter: blur(15px);
-            }
-        }
-
-        @keyframes showTitle {
-            0% {
-                opacity: 0;
-                transform: scale(0.8) translateY(20px);
-            }
-            100% {
+        @keyframes fadeInTitle {
+            to {
                 opacity: 1;
-                transform: scale(1) translateY(0);
             }
         }
 
@@ -220,7 +115,7 @@
             width: 100%;
             opacity: 0;
             z-index: 1;
-            transition: opacity 2s ease-in-out;
+            transition: opacity 1.5s ease-in-out;
         }
 
         .title {
@@ -230,17 +125,15 @@
             font-size: 3rem;
             z-index: 10;
             opacity: 0;
-            animation: fadeIn 5s ease-in forwards;
+            animation: fadeIn 2s ease-in forwards;
             animation-play-state: paused;
+            cursor: default;
+            user-select: none;
+            transition: all 0.3s ease;
         }
         
         @keyframes fadeIn {
-            0% { opacity: 0; }
-            20% { opacity: 0.1; }
-            40% { opacity: 0.3; }
-            60% { opacity: 0.5; }
-            80% { opacity: 0.8; }
-            100% { opacity: 1; }
+            to { opacity: 1; }
         }
         
         .image-slider {
@@ -287,7 +180,7 @@
             font-size: 0.75rem;
             margin: 5px 0;
             position: relative;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
         }
         
         .navigation a:hover {
@@ -309,15 +202,362 @@
             width: 100%;
         }
 
-        @media (max-width: 768px) {
-            .smoke-1, .smoke-2, .smoke-3 {
-                width: 100%;
-            }
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
 
-            .loader-title {
-                letter-spacing: 0.15em;
+        .modal-overlay.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            max-width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
             }
-            
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .password-modal {
+            text-align: center;
+            min-width: 300px;
+        }
+
+        .password-modal h2 {
+            margin-bottom: 20px;
+            color: #d4af37;
+        }
+
+        .password-modal input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+        }
+
+        .password-modal button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background: #d4af37;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .password-modal button:hover {
+            background: #b8941f;
+        }
+
+        /* Admin Panel Styles */
+        .admin-panel {
+            width: 900px;
+            max-width: 95vw;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #d4af37;
+        }
+
+        .admin-header h2 {
+            color: #d4af37;
+            font-size: 2rem;
+        }
+
+        .close-admin {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .close-admin:hover {
+            background: #cc0000;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            flex-wrap: wrap;
+        }
+
+        .admin-tab {
+            padding: 12px 24px;
+            background: transparent;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .admin-tab.active {
+            color: #d4af37;
+        }
+
+        .admin-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #d4af37;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #d4af37;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .form-group select option {
+            background: #2d2d2d;
+        }
+
+        .color-picker-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .color-picker-wrapper input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .color-preview {
+            padding: 5px 10px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-primary {
+            background: #d4af37;
+            color: black;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-right: 10px;
+        }
+
+        .btn-primary:hover {
+            background: #b8941f;
+        }
+
+        .btn-danger {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-danger:hover {
+            background: #cc0000;
+        }
+
+        .btn-edit {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            font-size: 12px;
+        }
+
+        .btn-edit:hover {
+            background: #45a049;
+        }
+
+        .image-list,
+        .nav-list {
+            margin-top: 30px;
+        }
+
+        .list-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .list-item.editing {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid #d4af37;
+        }
+
+        .list-item-view {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-item-edit {
+            display: none;
+        }
+
+        .list-item.editing .list-item-view {
+            display: none;
+        }
+
+        .list-item.editing .list-item-edit {
+            display: block;
+        }
+
+        .list-item-info {
+            flex: 1;
+        }
+
+        .list-item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+
+        .edit-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .edit-form input {
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            color: white;
+        }
+
+        .edit-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        /* Firebase Status */
+        .firebase-status {
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .firebase-status.connected {
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+        }
+
+        .firebase-status.disconnected {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff4444;
+        }
+
+        .firebase-status.syncing {
+            background: rgba(255, 255, 0, 0.2);
+            color: #ffff00;
+        }
+
+        .sync-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 5px;
+            display: none;
+            z-index: 3000;
+        }
+
+        .sync-indicator.show {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
             .title {
                 left: 20px;
                 top: 20px;
@@ -328,18 +568,25 @@
                 right: 20px;
                 bottom: 20px;
             }
+
+            .admin-panel {
+                padding: 20px;
+            }
+
+            .admin-tabs {
+                font-size: 14px;
+            }
+
+            .admin-tab {
+                padding: 8px 16px;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Loader Page -->
     <div class="loader-container" id="loader">
-        <div class="smoke-container">
-            <div class="smoke-layer smoke-1"></div>
-            <div class="smoke-layer smoke-2"></div>
-            <div class="smoke-layer smoke-3"></div>
-            <div class="smoke-particles"></div>
-        </div>
+        <div class="smoke-effect"></div>
         <div class="title-container">
             <h1 class="loader-title">ALADINE ATELIER</h1>
         </div>
@@ -347,74 +594,842 @@
     
     <!-- Main Page -->
     <div class="main-container" id="main-content">
-        <h1 class="title">Aladine Atelier</h1>
+        <h1 class="title" id="main-title">Aladine Atelier</h1>
         
-        <div class="image-slider">
-            <div class="slide active" style="background-image: url('/img/photo1.jpg');"></div>
-            <div class="slide" style="background-image: url('/img/photo2.jpg');"></div>
-            <div class="slide" style="background-image: url('/img/photo3.jpg');"></div>
-            <div class="slide" style="background-image: url('/img/photo4.jpg');"></div>
-            <div class="slide" style="background-image: url('/img/photo5.jpg');"></div>
+        <div class="image-slider" id="image-slider">
+            <!-- Images will be loaded dynamically -->
         </div>
         
-        <div class="navigation">
-            <a href="/pages/aladine.html">Aladine</a>
-            <a href="/pages/atelier.html">Atelier</a>
-            <a href="/pages/projets.html">Projets</a>
-            <a href="/pages/contact.html">Contact</a>
-            <a href="/pages/rejoindre.html">Nous rejoindre</a>
-            <a href="/pages/recherche.html">Rechercher</a>
+        <div class="navigation" id="navigation">
+            <!-- Navigation will be loaded dynamically -->
+        </div>
+    </div>
+
+    <!-- Sync Indicator -->
+    <div class="sync-indicator" id="syncIndicator">
+        <span id="syncStatus">Synchronisation...</span>
+    </div>
+
+    <!-- Password Modal -->
+    <div class="modal-overlay" id="passwordModal">
+        <div class="modal-content password-modal">
+            <h2>Accès Administration</h2>
+            <input type="password" id="passwordInput" placeholder="Mot de passe" />
+            <button onclick="checkPassword()">Connexion</button>
+            <button onclick="closePasswordModal()" style="background: #666; margin-top: 10px;">Annuler</button>
+        </div>
+    </div>
+
+    <!-- Admin Panel Modal -->
+    <div class="modal-overlay" id="adminModal">
+        <div class="modal-content admin-panel">
+            <div class="admin-header">
+                <h2>Panel d'Administration</h2>
+                <button class="close-admin" onclick="closeAdminPanel()">Fermer</button>
+            </div>
+
+            <div class="admin-tabs">
+                <button class="admin-tab active" onclick="switchTab('title')">Titre Principal</button>
+                <button class="admin-tab" onclick="switchTab('images')">Images</button>
+                <button class="admin-tab" onclick="switchTab('navigation')">Navigation</button>
+                <button class="admin-tab" onclick="switchTab('firebase')">Firebase</button>
+            </div>
+
+            <!-- Title Tab -->
+            <div class="tab-content active" id="title-tab">
+                <h3>Configuration du Titre Principal</h3>
+                <div class="form-group">
+                    <label>Texte du titre</label>
+                    <input type="text" id="titleText" value="Aladine Atelier" />
+                </div>
+                <div class="form-group">
+                    <label>Police</label>
+                    <select id="titleFont">
+                        <!-- Polices classiques -->
+                        <option value="Arial">Arial (Classique)</option>
+                        <option value="Georgia">Georgia (Élégant)</option>
+                        <option value="Times New Roman">Times New Roman (Traditionnel)</option>
+                        <option value="Courier New">Courier New (Machine à écrire)</option>
+                        <option value="Verdana">Verdana (Moderne)</option>
+                        <option value="Impact">Impact (Fort)</option>
+                        <option value="Comic Sans MS">Comic Sans MS (Ludique)</option>
+                        
+                        <!-- Polices Gothiques/Médiévales -->
+                        <option value="UnifrakturMaguntia">UnifrakturMaguntia (Gothique)</option>
+                        <option value="Cinzel">Cinzel (Renaissance)</option>
+                        <option value="Almendra">Almendra (Médiéval)</option>
+                        
+                        <!-- Polices Cyberpunk/Futuristes -->
+                        <option value="Orbitron">Orbitron (Cyberpunk)</option>
+                        <option value="Audiowide">Audiowide (Tech)</option>
+                        <option value="Megrim">Megrim (Néon)</option>
+                        <option value="Bungee">Bungee (Arcade)</option>
+                        
+                        <!-- Polices Artistiques -->
+                        <option value="Pirata One">Pirata One (Pirate)</option>
+                        <option value="Monoton">Monoton (Rétro Néon)</option>
+                        <option value="Libre Barcode 39 Text">Libre Barcode (Code-barres)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Taille (rem)</label>
+                    <input type="number" id="titleSize" value="3" min="1" max="10" step="0.5" />
+                </div>
+                <div class="form-group">
+                    <label>Couleur</label>
+                    <div class="color-picker-wrapper">
+                        <input type="color" id="titleColor" value="#ffffff" />
+                        <span class="color-preview" id="titleColorPreview">#ffffff</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Position Gauche (px)</label>
+                    <input type="number" id="titleLeft" value="50" min="0" />
+                </div>
+                <div class="form-group">
+                    <label>Position Haut (px)</label>
+                    <input type="number" id="titleTop" value="50" min="0" />
+                </div>
+                <button class="btn-primary" onclick="saveTitle()">Sauvegarder</button>
+                <button class="btn-danger" onclick="resetTitle()">Réinitialiser</button>
+            </div>
+
+            <!-- Images Tab -->
+            <div class="tab-content" id="images-tab">
+                <h3>Gestion des Images</h3>
+                <div class="form-group">
+                    <label>URL de l'image</label>
+                    <input type="text" id="imageUrl" placeholder="https://example.com/image.jpg ou /img/photo.jpg" />
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" id="imageAlt" placeholder="Description de l'image" />
+                </div>
+                <button class="btn-primary" onclick="addImage()">Ajouter Image</button>
+                
+                <div class="image-list" id="imageList">
+                    <h4>Images actuelles</h4>
+                </div>
+            </div>
+
+            <!-- Navigation Tab -->
+            <div class="tab-content" id="navigation-tab">
+                <h3>Configuration de la Navigation</h3>
+                <div class="form-group">
+                    <label>Texte du lien</label>
+                    <input type="text" id="navText" placeholder="Nouveau lien" />
+                </div>
+                <div class="form-group">
+                    <label>URL</label>
+                    <input type="text" id="navUrl" placeholder="/page.html ou #section" />
+                </div>
+                <div class="form-group">
+                    <label>Police de navigation</label>
+                    <select id="navFont">
+    <!-- Polices classiques -->
+    <option value="Arial">Arial (Classique)</option>
+    <option value="Georgia">Georgia (Élégant)</option>
+    <option value="Times New Roman">Times New Roman (Traditionnel)</option>
+    <option value="Courier New">Courier New (Machine à écrire)</option>
+    <option value="Verdana">Verdana (Moderne)</option>
+    
+    <!-- Polices Gothiques/Médiévales -->
+    <option value="UnifrakturMaguntia">UnifrakturMaguntia (Gothique)</option>
+    <option value="Cinzel">Cinzel (Renaissance)</option>
+    <option value="Almendra">Almendra (Médiéval)</option>
+    
+    <!-- Polices Cyberpunk/Futuristes -->
+    <option value="Orbitron">Orbitron (Cyberpunk)</option>
+    <option value="Audiowide">Audiowide (Tech)</option>
+    <option value="Megrim">Megrim (Néon)</option>
+    <option value="Bungee">Bungee (Arcade)</option>
+    
+    <!-- Polices Artistiques -->
+    <option value="Pirata One">Pirata One (Pirate)</option>
+    <option value="Monoton">Monoton (Rétro Néon)</option>
+    <option value="Libre Barcode 39 Text">Libre Barcode (Code-barres)</option>
+</select>
+                </div>
+                <div class="form-group">
+                    <label>Taille (rem)</label>
+                    <input type="number" id="navSize" value="0.75" min="0.5" max="3" step="0.25" />
+                </div>
+                <div class="form-group">
+                    <label>Couleur</label>
+                    <div class="color-picker-wrapper">
+                        <input type="color" id="navColor" value="#ffffff" />
+                        <span class="color-preview" id="navColorPreview">#ffffff</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Couleur au survol</label>
+                    <div class="color-picker-wrapper">
+                        <input type="color" id="navHoverColor" value="#d4af37" />
+                        <span class="color-preview" id="navHoverColorPreview">#d4af37</span>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="addNavItem()">Ajouter Lien</button>
+                <button class="btn-primary" onclick="saveNavStyle()">Sauvegarder Style</button>
+                
+                <div class="nav-list" id="navList">
+                    <h4>Liens actuels</h4>
+                </div>
+            </div>
+
+            <!-- Firebase Tab -->
+            <div class="tab-content" id="firebase-tab">
+                <h3>Configuration Firebase</h3>
+                <div class="form-group">
+                    <label>API Key</label>
+                    <input type="text" id="firebaseApiKey" placeholder="AIzaSy..." />
+                </div>
+                <div class="form-group">
+                    <label>Auth Domain</label>
+                    <input type="text" id="firebaseAuthDomain" placeholder="your-app.firebaseapp.com" />
+                </div>
+                <div class="form-group">
+                    <label>Project ID</label>
+                    <input type="text" id="firebaseProjectId" placeholder="your-project-id" />
+                </div>
+                <div class="form-group">
+                    <label>Storage Bucket</label>
+                    <input type="text" id="firebaseStorageBucket" placeholder="your-app.appspot.com" />
+                </div>
+                <div class="form-group">
+                    <label>Messaging Sender ID</label>
+                    <input type="text" id="firebaseMessagingSenderId" placeholder="123456789" />
+                </div>
+                <div class="form-group">
+                    <label>App ID</label>
+                    <input type="text" id="firebaseAppId" placeholder="1:123456789:web:abc123" />
+                </div>
+                <button class="btn-primary" onclick="saveFirebaseConfig()">Sauvegarder et Connecter</button>
+                <button class="btn-danger" onclick="disconnectFirebase()">Déconnecter</button>
+                <div class="firebase-status disconnected" id="firebaseStatus">
+                    Non connecté - Données stockées localement
+                </div>
+            </div>
         </div>
     </div>
     
     <script>
+        // Firebase instance
+        let firebaseApp = null;
+        let db = null;
+        let isFirebaseConnected = false;
+
+        // Default configuration
+        const defaultConfig = {
+            title: {
+                text: 'Aladine Atelier',
+                font: 'Arial',
+                size: 3,
+                color: '#ffffff',
+                left: 50,
+                top: 50
+            },
+            images: [
+                { id: 'img1', url: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=1920', alt: 'Bureau moderne' },
+                { id: 'img2', url: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920', alt: 'Espace de travail' },
+                { id: 'img3', url: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=1920', alt: 'Salle de réunion' },
+                { id: 'img4', url: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=1920', alt: 'Open space' },
+                { id: 'img5', url: 'https://images.unsplash.com/photo-1497366412874-3415097a27e7?w=1920', alt: 'Atelier créatif' }
+            ],
+            navigation: {
+                items: [
+                    { id: 'nav1', text: 'Aladine', url: '#aladine' },
+                    { id: 'nav2', text: 'Atelier', url: '#atelier' },
+                    { id: 'nav3', text: 'Projets', url: '#projets' },
+                    { id: 'nav4', text: 'Contact', url: '#contact' },
+                    { id: 'nav5', text: 'Nous rejoindre', url: '#rejoindre' },
+                    { id: 'nav6', text: 'Rechercher', url: '#recherche' }
+                ],
+                font: 'Arial',
+                size: 0.75,
+                color: '#ffffff',
+                hoverColor: '#d4af37'
+            },
+            firebase: {}
+        };
+
+        let siteConfig = JSON.parse(JSON.stringify(defaultConfig));
+
+        // Initialize Firebase
+        function initFirebase() {
+            const config = siteConfig.firebase;
+            if (config.apiKey && config.projectId) {
+                try {
+                    firebaseApp = firebase.initializeApp(config);
+                    db = firebase.firestore();
+                    isFirebaseConnected = true;
+                    updateFirebaseStatus('connected');
+                    loadFromFirebase();
+                    return true;
+                } catch (error) {
+                    console.error('Firebase initialization error:', error);
+                    updateFirebaseStatus('disconnected');
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        // Load data from Firebase
+        async function loadFromFirebase() {
+            if (!db) return;
+            
+            showSyncIndicator('Chargement depuis Firebase...');
+            
+            try {
+                const doc = await db.collection('siteConfig').doc('main').get();
+                if (doc.exists) {
+                    const data = doc.data();
+                    Object.assign(siteConfig, data);
+                    applyConfig();
+                    showSyncIndicator('Données synchronisées', 'success');
+                } else {
+                    // First time, save current config to Firebase
+                    await saveToFirebase();
+                }
+            } catch (error) {
+                console.error('Error loading from Firebase:', error);
+                showSyncIndicator('Erreur de synchronisation', 'error');
+            }
+        }
+
+        // Save data to Firebase
+        async function saveToFirebase() {
+            if (!db) {
+                saveToLocalStorage();
+                return;
+            }
+            
+            showSyncIndicator('Sauvegarde sur Firebase...');
+            
+            try {
+                await db.collection('siteConfig').doc('main').set(siteConfig);
+                showSyncIndicator('Sauvegardé sur Firebase', 'success');
+            } catch (error) {
+                console.error('Error saving to Firebase:', error);
+                showSyncIndicator('Erreur de sauvegarde', 'error');
+                saveToLocalStorage();
+            }
+        }
+
+        // Save to localStorage
+        function saveToLocalStorage() {
+            localStorage.setItem('aladineConfig', JSON.stringify(siteConfig));
+        }
+
+        // Load configuration
+        function loadConfig() {
+            const saved = localStorage.getItem('aladineConfig');
+            if (saved) {
+                Object.assign(siteConfig, JSON.parse(saved));
+            }
+            
+            // Try to connect to Firebase if config exists
+            if (siteConfig.firebase && siteConfig.firebase.apiKey) {
+                initFirebase();
+            }
+            
+            applyConfig();
+        }
+
+        // Save configuration
+        function saveConfig() {
+            if (isFirebaseConnected) {
+                saveToFirebase();
+            } else {
+                saveToLocalStorage();
+            }
+        }
+
+        // Show sync indicator
+        function showSyncIndicator(message, type = 'syncing') {
+            const indicator = document.getElementById('syncIndicator');
+            const status = document.getElementById('syncStatus');
+            
+            status.textContent = message;
+            indicator.className = 'sync-indicator show';
+            
+            if (type === 'success') {
+                indicator.style.background = 'rgba(0, 255, 0, 0.2)';
+                indicator.style.color = '#00ff00';
+            } else if (type === 'error') {
+                indicator.style.background = 'rgba(255, 0, 0, 0.2)';
+                indicator.style.color = '#ff4444';
+            } else {
+                indicator.style.background = 'rgba(255, 255, 0, 0.2)';
+                indicator.style.color = '#ffff00';
+            }
+            
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 3000);
+        }
+
+        // Update Firebase status
+        function updateFirebaseStatus(status) {
+            const statusEl = document.getElementById('firebaseStatus');
+            if (status === 'connected') {
+                statusEl.textContent = 'Connecté à Firebase';
+                statusEl.className = 'firebase-status connected';
+            } else if (status === 'syncing') {
+                statusEl.textContent = 'Synchronisation...';
+                statusEl.className = 'firebase-status syncing';
+            } else {
+                statusEl.textContent = 'Non connecté - Données stockées localement';
+                statusEl.className = 'firebase-status disconnected';
+            }
+        }
+
+        // Apply configuration to page
+        function applyConfig() {
+            // Apply title
+            const title = document.getElementById('main-title');
+            title.textContent = siteConfig.title.text;
+            title.style.fontFamily = siteConfig.title.font;
+            title.style.fontSize = siteConfig.title.size + 'rem';
+            title.style.color = siteConfig.title.color;
+            title.style.left = siteConfig.title.left + 'px';
+            title.style.top = siteConfig.title.top + 'px';
+
+            // Apply images
+            const slider = document.getElementById('image-slider');
+            slider.innerHTML = '';
+            siteConfig.images.forEach((img, index) => {
+                const slide = document.createElement('div');
+                slide.className = index === 0 ? 'slide active' : 'slide';
+                slide.style.backgroundImage = `url('${img.url}')`;
+                slide.title = img.alt;
+                slider.appendChild(slide);
+            });
+
+            // Apply navigation
+            const nav = document.getElementById('navigation');
+            nav.innerHTML = '';
+            siteConfig.navigation.items.forEach(item => {
+                const link = document.createElement('a');
+                link.href = item.url;
+                link.textContent = item.text;
+                link.style.fontFamily = siteConfig.navigation.font;
+                link.style.fontSize = siteConfig.navigation.size + 'rem';
+                link.style.color = siteConfig.navigation.color;
+                nav.appendChild(link);
+            });
+
+            // Update navigation hover styles
+            updateNavigationStyles();
+        }
+
+        // Update navigation hover styles
+        function updateNavigationStyles() {
+            let styleEl = document.getElementById('dynamicStyles');
+            if (!styleEl) {
+                styleEl = document.createElement('style');
+                styleEl.id = 'dynamicStyles';
+                document.head.appendChild(styleEl);
+            }
+            
+            styleEl.innerHTML = `
+                .navigation a:hover {
+                    color: ${siteConfig.navigation.hoverColor} !important;
+                }
+                .navigation a::after {
+                    background-color: ${siteConfig.navigation.hoverColor} !important;
+                }
+            `;
+        }
+
+        // Admin access with triple click
+        let clickCount = 0;
+        let clickTimer;
+
         document.addEventListener('DOMContentLoaded', function() {
+            const mainTitle = document.getElementById('main-title');
+            mainTitle.addEventListener('click', function(e) {
+                e.preventDefault();
+                clickCount++;
+                
+                if (clickCount === 1) {
+                    clickTimer = setTimeout(() => {
+                        clickCount = 0;
+                    }, 500);
+                }
+                
+                if (clickCount === 3) {
+                    clearTimeout(clickTimer);
+                    clickCount = 0;
+                    openPasswordModal();
+                }
+            });
+        });
+
+        // Modal functions
+        function openPasswordModal() {
+            document.getElementById('passwordModal').classList.add('show');
+            document.getElementById('passwordInput').focus();
+        }
+
+        function closePasswordModal() {
+            document.getElementById('passwordModal').classList.remove('show');
+            document.getElementById('passwordInput').value = '';
+        }
+
+        function checkPassword() {
+            const password = document.getElementById('passwordInput').value;
+            if (password === 'aladine123') {
+                closePasswordModal();
+                openAdminPanel();
+            } else {
+                alert('Mot de passe incorrect');
+                document.getElementById('passwordInput').value = '';
+            }
+        }
+
+        function openAdminPanel() {
+            document.getElementById('adminModal').classList.add('show');
+            loadAdminValues();
+            updateImageList();
+            updateNavList();
+            loadFirebaseConfig();
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('adminModal').classList.remove('show');
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName + '-tab').classList.add('active');
+        }
+
+        // Load admin values
+        function loadAdminValues() {
+            document.getElementById('titleText').value = siteConfig.title.text;
+            document.getElementById('titleFont').value = siteConfig.title.font;
+            document.getElementById('titleSize').value = siteConfig.title.size;
+            document.getElementById('titleColor').value = siteConfig.title.color;
+            document.getElementById('titleLeft').value = siteConfig.title.left;
+            document.getElementById('titleTop').value = siteConfig.title.top;
+            
+            document.getElementById('navFont').value = siteConfig.navigation.font;
+            document.getElementById('navSize').value = siteConfig.navigation.size;
+            document.getElementById('navColor').value = siteConfig.navigation.color;
+            document.getElementById('navHoverColor').value = siteConfig.navigation.hoverColor;
+        }
+
+        // Title functions
+        function saveTitle() {
+            siteConfig.title = {
+                text: document.getElementById('titleText').value,
+                font: document.getElementById('titleFont').value,
+                size: parseFloat(document.getElementById('titleSize').value),
+                color: document.getElementById('titleColor').value,
+                left: parseInt(document.getElementById('titleLeft').value),
+                top: parseInt(document.getElementById('titleTop').value)
+            };
+            saveConfig();
+            applyConfig();
+            alert('Titre sauvegardé !');
+        }
+
+        function resetTitle() {
+            siteConfig.title = JSON.parse(JSON.stringify(defaultConfig.title));
+            saveConfig();
+            applyConfig();
+            loadAdminValues();
+            alert('Titre réinitialisé !');
+        }
+
+        // Image functions
+        function addImage() {
+            const url = document.getElementById('imageUrl').value;
+            const alt = document.getElementById('imageAlt').value;
+            
+            if (url) {
+                const id = 'img' + Date.now();
+                siteConfig.images.push({ id, url, alt });
+                saveConfig();
+                applyConfig();
+                updateImageList();
+                document.getElementById('imageUrl').value = '';
+                document.getElementById('imageAlt').value = '';
+                alert('Image ajoutée !');
+            }
+        }
+
+        function updateImageList() {
+            const list = document.getElementById('imageList');
+            list.innerHTML = '<h4>Images actuelles</h4>';
+            
+            siteConfig.images.forEach((img, index) => {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.id = `image-item-${index}`;
+                item.innerHTML = `
+                    <div class="list-item-view">
+                        <div class="list-item-info">
+                            <strong>Image ${index + 1}</strong><br>
+                            <small>URL: ${img.url.substring(0, 50)}...</small><br>
+                            <small>Description: ${img.alt || 'Aucune description'}</small>
+                        </div>
+                        <div class="list-item-actions">
+                            <button class="btn-edit btn-small" onclick="editImage(${index})">Modifier</button>
+                            <button class="btn-danger btn-small" onclick="deleteImage(${index})">Supprimer</button>
+                        </div>
+                    </div>
+                    <div class="list-item-edit">
+                        <div class="edit-form">
+                            <input type="text" id="edit-img-url-${index}" value="${img.url}" placeholder="URL de l'image">
+                            <input type="text" id="edit-img-alt-${index}" value="${img.alt || ''}" placeholder="Description">
+                            <div class="edit-actions">
+                                <button class="btn-primary btn-small" onclick="saveImageEdit(${index})">Sauvegarder</button>
+                                <button class="btn-danger btn-small" onclick="cancelImageEdit(${index})">Annuler</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function editImage(index) {
+            document.getElementById(`image-item-${index}`).classList.add('editing');
+        }
+
+        function cancelImageEdit(index) {
+            document.getElementById(`image-item-${index}`).classList.remove('editing');
+        }
+
+        function saveImageEdit(index) {
+            const url = document.getElementById(`edit-img-url-${index}`).value;
+            const alt = document.getElementById(`edit-img-alt-${index}`).value;
+            
+            if (url) {
+                siteConfig.images[index].url = url;
+                siteConfig.images[index].alt = alt;
+                saveConfig();
+                applyConfig();
+                updateImageList();
+                alert('Image modifiée !');
+            }
+        }
+
+        function deleteImage(index) {
+            if (confirm('Supprimer cette image ?')) {
+                siteConfig.images.splice(index, 1);
+                saveConfig();
+                applyConfig();
+                updateImageList();
+            }
+        }
+
+        // Navigation functions
+        function addNavItem() {
+            const text = document.getElementById('navText').value;
+            const url = document.getElementById('navUrl').value;
+            
+            if (text && url) {
+                const id = 'nav' + Date.now();
+                siteConfig.navigation.items.push({ id, text, url });
+                saveConfig();
+                applyConfig();
+                updateNavList();
+                document.getElementById('navText').value = '';
+                document.getElementById('navUrl').value = '';
+                alert('Lien ajouté !');
+            }
+        }
+
+        function saveNavStyle() {
+            siteConfig.navigation.font = document.getElementById('navFont').value;
+            siteConfig.navigation.size = parseFloat(document.getElementById('navSize').value);
+            siteConfig.navigation.color = document.getElementById('navColor').value;
+            siteConfig.navigation.hoverColor = document.getElementById('navHoverColor').value;
+            saveConfig();
+            applyConfig();
+            alert('Style de navigation sauvegardé !');
+        }
+
+        function updateNavList() {
+            const list = document.getElementById('navList');
+            list.innerHTML = '<h4>Liens actuels</h4>';
+            
+            siteConfig.navigation.items.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'list-item';
+                div.id = `nav-item-${index}`;
+                div.innerHTML = `
+                    <div class="list-item-view">
+                        <div class="list-item-info">
+                            <strong>${item.text}</strong><br>
+                            <small>URL: ${item.url}</small>
+                        </div>
+                        <div class="list-item-actions">
+                            <button class="btn-edit btn-small" onclick="editNavItem(${index})">Modifier</button>
+                            <button class="btn-danger btn-small" onclick="deleteNavItem(${index})">Supprimer</button>
+                        </div>
+                    </div>
+                    <div class="list-item-edit">
+                        <div class="edit-form">
+                            <input type="text" id="edit-nav-text-${index}" value="${item.text}" placeholder="Texte du lien">
+                            <input type="text" id="edit-nav-url-${index}" value="${item.url}" placeholder="URL">
+                            <div class="edit-actions">
+                                <button class="btn-primary btn-small" onclick="saveNavEdit(${index})">Sauvegarder</button>
+                                <button class="btn-danger btn-small" onclick="cancelNavEdit(${index})">Annuler</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function editNavItem(index) {
+            document.getElementById(`nav-item-${index}`).classList.add('editing');
+        }
+
+        function cancelNavEdit(index) {
+            document.getElementById(`nav-item-${index}`).classList.remove('editing');
+        }
+
+        function saveNavEdit(index) {
+            const text = document.getElementById(`edit-nav-text-${index}`).value;
+            const url = document.getElementById(`edit-nav-url-${index}`).value;
+            
+            if (text && url) {
+                siteConfig.navigation.items[index].text = text;
+                siteConfig.navigation.items[index].url = url;
+                saveConfig();
+                applyConfig();
+                updateNavList();
+                alert('Lien modifié !');
+            }
+        }
+
+        function deleteNavItem(index) {
+            if (confirm('Supprimer ce lien ?')) {
+                siteConfig.navigation.items.splice(index, 1);
+                saveConfig();
+                applyConfig();
+                updateNavList();
+            }
+        }
+
+        // Firebase configuration
+        function loadFirebaseConfig() {
+            if (siteConfig.firebase) {
+                document.getElementById('firebaseApiKey').value = siteConfig.firebase.apiKey || '';
+                document.getElementById('firebaseAuthDomain').value = siteConfig.firebase.authDomain || '';
+                document.getElementById('firebaseProjectId').value = siteConfig.firebase.projectId || '';
+                document.getElementById('firebaseStorageBucket').value = siteConfig.firebase.storageBucket || '';
+                document.getElementById('firebaseMessagingSenderId').value = siteConfig.firebase.messagingSenderId || '';
+                document.getElementById('firebaseAppId').value = siteConfig.firebase.appId || '';
+            }
+        }
+
+        function saveFirebaseConfig() {
+            siteConfig.firebase = {
+                apiKey: document.getElementById('firebaseApiKey').value,
+                authDomain: document.getElementById('firebaseAuthDomain').value,
+                projectId: document.getElementById('firebaseProjectId').value,
+                storageBucket: document.getElementById('firebaseStorageBucket').value,
+                messagingSenderId: document.getElementById('firebaseMessagingSenderId').value,
+                appId: document.getElementById('firebaseAppId').value
+            };
+            
+            saveToLocalStorage();
+            
+            if (initFirebase()) {
+                alert('Connecté à Firebase avec succès !');
+                saveToFirebase();
+            } else {
+                alert('Configuration sauvegardée localement. Vérifiez vos identifiants Firebase.');
+            }
+        }
+
+        function disconnectFirebase() {
+            if (firebaseApp) {
+                firebaseApp.delete();
+                firebaseApp = null;
+                db = null;
+                isFirebaseConnected = false;
+                updateFirebaseStatus('disconnected');
+                alert('Déconnecté de Firebase');
+            }
+        }
+
+        // Color preview updates
+        document.getElementById('titleColor').addEventListener('input', function(e) {
+            document.getElementById('titleColorPreview').textContent = e.target.value;
+        });
+
+        document.getElementById('navColor').addEventListener('input', function(e) {
+            document.getElementById('navColorPreview').textContent = e.target.value;
+        });
+
+        document.getElementById('navHoverColor').addEventListener('input', function(e) {
+            document.getElementById('navHoverColorPreview').textContent = e.target.value;
+        });
+
+        // Password input enter key
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
+        // Main initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load configuration
+            loadConfig();
+            
             // Loader transition timing
-            const loaderDuration = 6500; // 6.5 seconds
+            const loaderDuration = 4000; // Reduced for better performance
             const loader = document.getElementById('loader');
             const mainContent = document.getElementById('main-content');
             
-            // Title and navigation animations
             const title = document.querySelector('.title');
             const navigation = document.querySelector('.navigation');
             
-            // Transition from loader to main content
             setTimeout(function() {
                 loader.style.opacity = '0';
-                loader.style.transform = 'translateY(-20px)';
                 mainContent.style.opacity = '1';
                 
-                // Start animations for main content
                 title.style.animationPlayState = 'running';
                 navigation.style.animationPlayState = 'running';
                 
-                // Remove loader after transition completes
                 setTimeout(function() {
                     loader.style.display = 'none';
-                }, 1500);
+                }, 1000);
             }, loaderDuration);
             
-            // Image slider functionality
-            const slides = document.querySelectorAll('.slide');
+            // Image slider
             let currentSlide = 0;
             
-            function showSlide(index) {
-                slides.forEach(slide => slide.classList.remove('active'));
-                slides[index].classList.add('active');
-            }
-            
             function nextSlide() {
-                currentSlide = (currentSlide + 1) % slides.length;
-                showSlide(currentSlide);
+                const slides = document.querySelectorAll('.slide');
+                if (slides.length > 0) {
+                    slides[currentSlide].classList.remove('active');
+                    currentSlide = (currentSlide + 1) % slides.length;
+                    slides[currentSlide].classList.add('active');
+                }
             }
             
-            // Only start the slider when the main content is visible
+            // Start slider after loader
             setTimeout(function() {
                 setInterval(nextSlide, 4000);
             }, loaderDuration + 500);
-            
-            // Show first slide initially
-            showSlide(0);
         });
     </script>
 </body>
