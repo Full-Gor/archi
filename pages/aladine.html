@@ -4,14 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aladine - Aladine Atelier</title>
+    
+    <!-- Google Fonts pour styles variés -->
+    <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Megrim&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Barcode+39+Text&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+    
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body, html {
             margin: 0;
             padding: 0;
-            height: 100%;
+            min-height: 100%;
             background-color: black;
             color: white;
             font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
         }
         
         .container {
@@ -27,6 +47,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 50px;
+            flex-wrap: wrap;
+            gap: 20px;
         }
         
         .logo a {
@@ -34,21 +56,25 @@
             text-decoration: none;
             font-size: 2rem;
             font-weight: bold;
+            cursor: default;
+            user-select: none;
+            transition: all 0.3s ease;
         }
         
         .navigation {
             display: flex;
-            flex-direction: column;
-            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
         }
         
         .navigation a {
             color: white;
             text-decoration: none;
-            font-size: 0.75rem;
-            margin: 5px 0;
+            font-size: 0.9rem;
             position: relative;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            padding: 5px 10px;
         }
         
         .navigation a:hover {
@@ -60,8 +86,9 @@
             position: absolute;
             width: 0;
             height: 2px;
-            bottom: -5px;
-            right: 0;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
             background-color: #d4af37;
             transition: width 0.3s ease;
         }
@@ -82,12 +109,12 @@
             display: flex;
             flex-wrap: wrap;
             margin-top: 50px;
+            gap: 50px;
         }
         
         .bio {
             flex: 1;
             min-width: 300px;
-            margin-right: 50px;
         }
         
         .profile {
@@ -101,22 +128,26 @@
             height: auto;
             object-fit: cover;
             margin-bottom: 20px;
+            border-radius: 10px;
         }
         
         h1 {
             font-size: 2.5rem;
             margin-bottom: 30px;
+            transition: all 0.3s ease;
         }
         
         h2 {
             font-size: 1.8rem;
             color: #d4af37;
             margin-bottom: 20px;
+            transition: all 0.3s ease;
         }
         
         p {
             line-height: 1.6;
             margin-bottom: 20px;
+            transition: all 0.3s ease;
         }
         
         .achievements {
@@ -125,11 +156,452 @@
         
         .achievement {
             margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .achievement:hover {
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateX(10px);
         }
         
         .achievement-year {
             font-weight: bold;
             color: #d4af37;
+            margin-bottom: 5px;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            max-width: 95%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .password-modal {
+            text-align: center;
+            min-width: 300px;
+        }
+
+        .password-modal h2 {
+            margin-bottom: 20px;
+            color: #d4af37;
+        }
+
+        .password-modal input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+        }
+
+        .password-modal button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background: #d4af37;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .password-modal button:hover {
+            background: #b8941f;
+        }
+
+        /* Admin Panel Styles */
+        .admin-panel {
+            width: 900px;
+            max-width: 95vw;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #d4af37;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .admin-header h2 {
+            color: #d4af37;
+            font-size: 2rem;
+        }
+
+        .close-admin {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .close-admin:hover {
+            background: #cc0000;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            flex-wrap: wrap;
+        }
+
+        .admin-tab {
+            padding: 12px 24px;
+            background: transparent;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            font-size: 14px;
+        }
+
+        .admin-tab.active {
+            color: #d4af37;
+        }
+
+        .admin-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #d4af37;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #d4af37;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-group select option {
+            background: #2d2d2d;
+        }
+
+        .color-picker-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .color-picker-wrapper input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .color-preview {
+            padding: 8px 15px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            font-family: monospace;
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #d4af37;
+            color: black;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary:hover {
+            background: #b8941f;
+        }
+
+        .btn-danger {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .btn-danger:hover {
+            background: #cc0000;
+        }
+
+        .btn-edit {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            font-size: 12px;
+        }
+
+        .btn-edit:hover {
+            background: #45a049;
+        }
+
+        .list-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .list-item.editing {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid #d4af37;
+        }
+
+        .list-item-view {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .list-item-edit {
+            display: none;
+        }
+
+        .list-item.editing .list-item-view {
+            display: none;
+        }
+
+        .list-item.editing .list-item-edit {
+            display: block;
+        }
+
+        .list-item-info {
+            flex: 1;
+        }
+
+        .list-item-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+
+        .edit-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .edit-form input,
+        .edit-form textarea {
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            color: white;
+        }
+
+        .edit-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .logo a {
+                font-size: 1.5rem;
+            }
+            
+            .navigation {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            
+            .navigation a {
+                font-size: 0.8rem;
+                padding: 3px 8px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            h2 {
+                font-size: 1.4rem;
+            }
+            
+            .content {
+                flex-direction: column;
+                gap: 30px;
+            }
+            
+            .admin-panel {
+                padding: 20px;
+            }
+            
+            .admin-tabs {
+                font-size: 12px;
+            }
+            
+            .admin-tab {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            
+            .color-picker-wrapper {
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            .color-picker-wrapper input[type="color"] {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .btn-primary,
+            .btn-danger {
+                padding: 10px 20px;
+                font-size: 14px;
+                width: 100%;
+            }
+            
+            .list-item-view {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .list-item-actions {
+                width: 100%;
+                justify-content: flex-start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .admin-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .admin-tabs {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .admin-tab {
+                width: 100%;
+                text-align: left;
+            }
         }
     </style>
 </head>
@@ -137,9 +609,10 @@
     <div class="container">
         <div class="header">
             <div class="logo">
-                <a href="index.html">Aladine Atelier</a>
+                <a id="logo-text">Aladine Atelier</a>
             </div>
-            <div class="navigation">
+            <div class="navigation" id="navigation">
+                <a href="../index.html">Accueil</a>
                 <a href="aladine.html" class="active">Aladine</a>
                 <a href="atelier.html">Atelier</a>
                 <a href="projets.html">Projets</a>
@@ -149,50 +622,895 @@
             </div>
         </div>
         
-        <h1>Aladine</h1>
+        <h1 id="page-title">Aladine</h1>
         
         <div class="content">
             <div class="bio">
-                <p>Fondateur et visionnaire derrière Aladine Atelier, Aladine Mahmoud est un architecte internationalement reconnu dont le travail transcende les conventions traditionnelles de l'architecture.</p>
-                
-                <p>Né à Beyrouth et formé à l'École Spéciale d'Architecture de Paris, Aladine a développé une approche unique qui marie l'esthétique contemporaine avec les principes durables et les influences culturelles diverses.</p>
-                
-                <p>Sa philosophie de design s'articule autour de trois principes fondamentaux : la durabilité environnementale, l'intégration culturelle et l'innovation technique. Chacun de ses projets raconte une histoire unique, créant un dialogue entre l'espace, l'environnement et les personnes qui l'habitent.</p>
+                <div id="bio-content">
+                    <p>Fondateur et visionnaire derrière Aladine Atelier, Aladine Mahmoud est un architecte internationalement reconnu dont le travail transcende les conventions traditionnelles de l'architecture.</p>
+                    
+                    <p>Né à Beyrouth et formé à l'École Spéciale d'Architecture de Paris, Aladine a développé une approche unique qui marie l'esthétique contemporaine avec les principes durables et les influences culturelles diverses.</p>
+                    
+                    <p>Sa philosophie de design s'articule autour de trois principes fondamentaux : la durabilité environnementale, l'intégration culturelle et l'innovation technique. Chacun de ses projets raconte une histoire unique, créant un dialogue entre l'espace, l'environnement et les personnes qui l'habitent.</p>
+                </div>
                 
                 <div class="achievements">
-                    <h2>Distinctions</h2>
+                    <h2 id="achievements-title">Distinctions</h2>
                     
-                    <div class="achievement">
-                        <div class="achievement-year">2023</div>
-                        <div>Prix Pritzker d'Architecture - Nomination</div>
-                    </div>
-                    
-                    <div class="achievement">
-                        <div class="achievement-year">2021</div>
-                        <div>Médaille d'Or de l'Académie d'Architecture</div>
-                    </div>
-                    
-                    <div class="achievement">
-                        <div class="achievement-year">2019</div>
-                        <div>Grand Prix AFEX de l'Architecture Française à l'Export</div>
-                    </div>
-                    
-                    <div class="achievement">
-                        <div class="achievement-year">2016</div>
-                        <div>Prix Aga Khan d'Architecture</div>
+                    <div id="achievements-list">
+                        <div class="achievement">
+                            <div class="achievement-year">2023</div>
+                            <div>Prix Pritzker d'Architecture - Nomination</div>
+                        </div>
+                        
+                        <div class="achievement">
+                            <div class="achievement-year">2021</div>
+                            <div>Médaille d'Or de l'Académie d'Architecture</div>
+                        </div>
+                        
+                        <div class="achievement">
+                            <div class="achievement-year">2019</div>
+                            <div>Grand Prix AFEX de l'Architecture Française à l'Export</div>
+                        </div>
+                        
+                        <div class="achievement">
+                            <div class="achievement-year">2016</div>
+                            <div>Prix Aga Khan d'Architecture</div>
+                        </div>
                     </div>
                 </div>
             </div>
             
             <div class="profile">
-                <img src="/api/placeholder/500/600" alt="Portrait d'Aladine" class="profile-image">
+                <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=500&h=600&fit=crop" alt="Architecte travaillant sur des plans" class="profile-image" id="profile-image">
                 
-                <h2>Vision</h2>
-                <p>"L'architecture n'est pas simplement l'art de construire des bâtiments, c'est l'art de créer des expériences, de façonner des émotions et de laisser un impact durable sur le monde qui nous entoure. Chaque projet est une opportunité de redéfinir notre relation à l'espace et à l'environnement."</p>
-                
-                <p>"Je crois fermement que l'architecture a le pouvoir de transformer positivement la vie des gens, de catalyser le changement social et de contribuer à un avenir plus durable pour notre planète."</p>
+                <h2 id="vision-title">Vision</h2>
+                <div id="vision-content">
+                    <p>"L'architecture n'est pas simplement l'art de construire des bâtiments, c'est l'art de créer des expériences, de façonner des émotions et de laisser un impact durable sur le monde qui nous entoure. Chaque projet est une opportunité de redéfinir notre relation à l'espace et à l'environnement."</p>
+                    
+                    <p>"Je crois fermement que l'architecture a le pouvoir de transformer positivement la vie des gens, de catalyser le changement social et de contribuer à un avenir plus durable pour notre planète."</p>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Password Modal -->
+    <div class="modal-overlay" id="passwordModal">
+        <div class="modal-content password-modal">
+            <h2>Accès Administration</h2>
+            <input type="password" id="passwordInput" placeholder="Mot de passe" />
+            <button onclick="checkPassword()">Connexion</button>
+            <button onclick="closePasswordModal()" style="background: #666; margin-top: 10px;">Annuler</button>
+        </div>
+    </div>
+
+    <!-- Admin Panel Modal -->
+    <div class="modal-overlay" id="adminModal">
+        <div class="modal-content admin-panel">
+            <div class="admin-header">
+                <h2>Panel d'Administration - Page Aladine</h2>
+                <button class="close-admin" onclick="closeAdminPanel()">Fermer</button>
+            </div>
+
+            <div class="admin-tabs">
+                <button class="admin-tab active" onclick="switchTab('general')">Général</button>
+                <button class="admin-tab" onclick="switchTab('bio')">Biographie</button>
+                <button class="admin-tab" onclick="switchTab('achievements')">Distinctions</button>
+                <button class="admin-tab" onclick="switchTab('vision')">Vision</button>
+                <button class="admin-tab" onclick="switchTab('navigation')">Navigation</button>
+                <button class="admin-tab" onclick="switchTab('styles')">Styles</button>
+            </div>
+
+            <!-- General Tab -->
+            <div class="tab-content active" id="general-tab">
+                <h3>Configuration Générale</h3>
+                <div class="form-group">
+                    <label>Titre du logo</label>
+                    <input type="text" id="logoText" value="Aladine Atelier" />
+                </div>
+                <div class="form-group">
+                    <label>Titre de la page</label>
+                    <input type="text" id="pageTitle" value="Aladine" />
+                </div>
+                <div class="form-group">
+                    <label>URL de l'image de profil</label>
+                    <input type="text" id="profileImageUrl" placeholder="URL de l'image" />
+                </div>
+                <div class="form-group">
+                    <label>Texte alternatif de l'image</label>
+                    <input type="text" id="profileImageAlt" value="Architecte travaillant sur des plans" />
+                </div>
+                <button class="btn-primary" onclick="saveGeneral()">Sauvegarder</button>
+            </div>
+
+            <!-- Bio Tab -->
+            <div class="tab-content" id="bio-tab">
+                <h3>Gestion de la Biographie</h3>
+                <div class="form-group">
+                    <label>Nouveau paragraphe</label>
+                    <textarea id="newBioParagraph" placeholder="Entrez le texte du paragraphe..."></textarea>
+                </div>
+                <button class="btn-primary" onclick="addBioParagraph()">Ajouter Paragraphe</button>
+                
+                <div class="bio-list" id="bioList">
+                    <h4>Paragraphes actuels</h4>
+                </div>
+            </div>
+
+            <!-- Achievements Tab -->
+            <div class="tab-content" id="achievements-tab">
+                <h3>Gestion des Distinctions</h3>
+                <div class="form-group">
+                    <label>Titre de la section</label>
+                    <input type="text" id="achievementsTitle" value="Distinctions" />
+                </div>
+                <div class="form-group">
+                    <label>Année</label>
+                    <input type="text" id="achievementYear" placeholder="2024" />
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" id="achievementDesc" placeholder="Prix ou distinction..." />
+                </div>
+                <button class="btn-primary" onclick="addAchievement()">Ajouter Distinction</button>
+                <button class="btn-primary" onclick="saveAchievementsTitle()">Sauvegarder Titre</button>
+                
+                <div class="achievements-list" id="achievementsList">
+                    <h4>Distinctions actuelles</h4>
+                </div>
+            </div>
+
+            <!-- Vision Tab -->
+            <div class="tab-content" id="vision-tab">
+                <h3>Gestion de la Vision</h3>
+                <div class="form-group">
+                    <label>Titre de la section</label>
+                    <input type="text" id="visionTitle" value="Vision" />
+                </div>
+                <div class="form-group">
+                    <label>Nouveau paragraphe de vision</label>
+                    <textarea id="newVisionParagraph" placeholder="Entrez le texte..."></textarea>
+                </div>
+                <button class="btn-primary" onclick="addVisionParagraph()">Ajouter Paragraphe</button>
+                <button class="btn-primary" onclick="saveVisionTitle()">Sauvegarder Titre</button>
+                
+                <div class="vision-list" id="visionList">
+                    <h4>Paragraphes actuels</h4>
+                </div>
+            </div>
+
+            <!-- Navigation Tab -->
+            <div class="tab-content" id="navigation-tab">
+                <h3>Configuration de la Navigation</h3>
+                <div class="form-group">
+                    <label>Texte du lien</label>
+                    <input type="text" id="navText" placeholder="Nouveau lien" />
+                </div>
+                <div class="form-group">
+                    <label>URL</label>
+                    <input type="text" id="navUrl" placeholder="page.html ou #section" />
+                </div>
+                <button class="btn-primary" onclick="addNavItem()">Ajouter Lien</button>
+                
+                <div class="nav-list" id="navList">
+                    <h4>Liens actuels</h4>
+                </div>
+            </div>
+
+            <!-- Styles Tab -->
+            <div class="tab-content" id="styles-tab">
+                <h3>Configuration des Styles</h3>
+                
+                <h4>Polices</h4>
+                <div class="form-group">
+                    <label>Police principale</label>
+                    <select id="mainFont">
+                        <option value="Arial">Arial (Classique)</option>
+                        <option value="Georgia">Georgia (Élégant)</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                        <option value="Verdana">Verdana (Moderne)</option>
+                        <option value="UnifrakturMaguntia">UnifrakturMaguntia (Gothique)</option>
+                        <option value="Cinzel">Cinzel (Renaissance)</option>
+                        <option value="Orbitron">Orbitron (Cyberpunk)</option>
+                        <option value="Audiowide">Audiowide (Tech)</option>
+                        <option value="Pirata One">Pirata One (Pirate)</option>
+                        <option value="Megrim">Megrim (Néon)</option>
+                        <option value="Bungee">Bungee (Arcade)</option>
+                    </select>
+                </div>
+                
+                <h4>Couleurs</h4>
+                <div class="form-group">
+                    <label>Couleur du texte principal</label>
+                    <div class="color-picker-wrapper">
+                        <input type="color" id="textColor" value="#ffffff" />
+                        <span class="color-preview" id="textColorPreview">#ffffff</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Couleur d'accent (titres, hover)</label>
+                    <div class="color-picker-wrapper">
+                        <input type="color" id="accentColor" value="#d4af37" />
+                        <span class="color-preview" id="accentColorPreview">#d4af37</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Couleur de fond</label>
+                    <div class="color-picker-wrapper">
+                        <input type="color" id="bgColor" value="#000000" />
+                        <span class="color-preview" id="bgColorPreview">#000000</span>
+                    </div>
+                </div>
+                
+                <h4>Tailles</h4>
+                <div class="form-group">
+                    <label>Taille du titre principal (rem)</label>
+                    <input type="number" id="titleSize" value="2.5" min="1" max="5" step="0.1" />
+                </div>
+                
+                <div class="form-group">
+                    <label>Taille des sous-titres (rem)</label>
+                    <input type="number" id="subtitleSize" value="1.8" min="1" max="3" step="0.1" />
+                </div>
+                
+                <button class="btn-primary" onclick="saveStyles()">Sauvegarder les Styles</button>
+                <button class="btn-danger" onclick="resetStyles()">Réinitialiser</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Configuration Storage
+        const pageConfig = {
+            general: {
+                logoText: 'Aladine Atelier',
+                pageTitle: 'Aladine',
+                profileImage: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=500&h=600&fit=crop',
+                profileImageAlt: 'Architecte travaillant sur des plans'
+            },
+            bio: [
+                "Fondateur et visionnaire derrière Aladine Atelier, Aladine Mahmoud est un architecte internationalement reconnu dont le travail transcende les conventions traditionnelles de l'architecture.",
+                "Né à Beyrouth et formé à l'École Spéciale d'Architecture de Paris, Aladine a développé une approche unique qui marie l'esthétique contemporaine avec les principes durables et les influences culturelles diverses.",
+                "Sa philosophie de design s'articule autour de trois principes fondamentaux : la durabilité environnementale, l'intégration culturelle et l'innovation technique. Chacun de ses projets raconte une histoire unique, créant un dialogue entre l'espace, l'environnement et les personnes qui l'habitent."
+            ],
+            achievements: {
+                title: 'Distinctions',
+                items: [
+                    { year: '2023', desc: "Prix Pritzker d'Architecture - Nomination" },
+                    { year: '2021', desc: "Médaille d'Or de l'Académie d'Architecture" },
+                    { year: '2019', desc: "Grand Prix AFEX de l'Architecture Française à l'Export" },
+                    { year: '2016', desc: "Prix Aga Khan d'Architecture" }
+                ]
+            },
+            vision: {
+                title: 'Vision',
+                paragraphs: [
+                    "\"L'architecture n'est pas simplement l'art de construire des bâtiments, c'est l'art de créer des expériences, de façonner des émotions et de laisser un impact durable sur le monde qui nous entoure. Chaque projet est une opportunité de redéfinir notre relation à l'espace et à l'environnement.\"",
+                    "\"Je crois fermement que l'architecture a le pouvoir de transformer positivement la vie des gens, de catalyser le changement social et de contribuer à un avenir plus durable pour notre planète.\""
+                ]
+            },
+            navigation: [
+    { text: 'Accueil', url: '../index.html' }, // Remonte au répertoire parent
+    { text: 'Aladine', url: 'aladine.html', active: true }, // Même répertoire
+    { text: 'Atelier', url: 'atelier.html' }, // Même répertoire
+    { text: 'Projets', url: 'projets.html' }, // Même répertoire
+    { text: 'Contact', url: 'contact.html' }, // Même répertoire
+    { text: 'Nous rejoindre', url: 'rejoindre.html' }, // Même répertoire
+    { text: 'Rechercher', url: 'recherche.html' } // Même répertoire
+],
+            styles: {
+                mainFont: 'Arial',
+                textColor: '#ffffff',
+                accentColor: '#d4af37',
+                bgColor: '#000000',
+                titleSize: 2.5,
+                subtitleSize: 1.8
+            }
+        };
+
+        // Load saved configuration
+        function loadConfig() {
+            const saved = localStorage.getItem('aladinePageConfig');
+            if (saved) {
+                Object.assign(pageConfig, JSON.parse(saved));
+                applyConfig();
+            }
+        }
+
+        // Save configuration
+        function saveConfig() {
+            localStorage.setItem('aladinePageConfig', JSON.stringify(pageConfig));
+        }
+
+        // Apply configuration to page
+        function applyConfig() {
+            // General
+            document.getElementById('logo-text').textContent = pageConfig.general.logoText;
+            document.getElementById('page-title').textContent = pageConfig.general.pageTitle;
+            document.getElementById('profile-image').src = pageConfig.general.profileImage;
+            document.getElementById('profile-image').alt = pageConfig.general.profileImageAlt;
+            
+            // Bio
+            const bioContent = document.getElementById('bio-content');
+            bioContent.innerHTML = '';
+            pageConfig.bio.forEach(paragraph => {
+                const p = document.createElement('p');
+                p.textContent = paragraph;
+                bioContent.appendChild(p);
+            });
+            
+            // Achievements
+            document.getElementById('achievements-title').textContent = pageConfig.achievements.title;
+            const achievementsList = document.getElementById('achievements-list');
+            achievementsList.innerHTML = '';
+            pageConfig.achievements.items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'achievement';
+                div.innerHTML = `
+                    <div class="achievement-year">${item.year}</div>
+                    <div>${item.desc}</div>
+                `;
+                achievementsList.appendChild(div);
+            });
+            
+            // Vision
+            document.getElementById('vision-title').textContent = pageConfig.vision.title;
+            const visionContent = document.getElementById('vision-content');
+            visionContent.innerHTML = '';
+            pageConfig.vision.paragraphs.forEach(paragraph => {
+                const p = document.createElement('p');
+                p.textContent = paragraph;
+                visionContent.appendChild(p);
+            });
+            
+            // Navigation
+            const nav = document.getElementById('navigation');
+            nav.innerHTML = '';
+            pageConfig.navigation.forEach(item => {
+                const link = document.createElement('a');
+                link.href = item.url;
+                link.textContent = item.text;
+                if (item.active) link.className = 'active';
+                nav.appendChild(link);
+            });
+            
+            // Styles
+            applyStyles();
+        }
+
+        // Apply styles
+        function applyStyles() {
+            const style = pageConfig.styles;
+            document.body.style.fontFamily = `'${style.mainFont}', sans-serif`;
+            document.body.style.color = style.textColor;
+            document.body.style.backgroundColor = style.bgColor;
+            
+            // Update all h1
+            document.querySelectorAll('h1').forEach(h1 => {
+                h1.style.fontSize = style.titleSize + 'rem';
+            });
+            
+            // Update all h2
+            document.querySelectorAll('h2').forEach(h2 => {
+                h2.style.fontSize = style.subtitleSize + 'rem';
+                h2.style.color = style.accentColor;
+            });
+            
+            // Update achievement years
+            document.querySelectorAll('.achievement-year').forEach(year => {
+                year.style.color = style.accentColor;
+            });
+            
+            // Update navigation hover
+            updateNavigationStyles();
+        }
+
+        // Update navigation hover styles
+        function updateNavigationStyles() {
+            let styleEl = document.getElementById('dynamicStyles');
+            if (!styleEl) {
+                styleEl = document.createElement('style');
+                styleEl.id = 'dynamicStyles';
+                document.head.appendChild(styleEl);
+            }
+            
+            styleEl.innerHTML = `
+                .navigation a:hover {
+                    color: ${pageConfig.styles.accentColor} !important;
+                }
+                .navigation a::after {
+                    background-color: ${pageConfig.styles.accentColor} !important;
+                }
+                .navigation a.active {
+                    color: ${pageConfig.styles.accentColor} !important;
+                }
+            `;
+        }
+
+        // Admin access with triple click
+        let clickCount = 0;
+        let clickTimer;
+
+        document.getElementById('logo-text').addEventListener('click', function(e) {
+            e.preventDefault();
+            clickCount++;
+            
+            if (clickCount === 1) {
+                clickTimer = setTimeout(() => {
+                    clickCount = 0;
+                }, 500);
+            }
+            
+            if (clickCount === 3) {
+                clearTimeout(clickTimer);
+                clickCount = 0;
+                openPasswordModal();
+            }
+        });
+
+        // Modal functions
+        function openPasswordModal() {
+            document.getElementById('passwordModal').classList.add('show');
+            document.getElementById('passwordInput').focus();
+        }
+
+        function closePasswordModal() {
+            document.getElementById('passwordModal').classList.remove('show');
+            document.getElementById('passwordInput').value = '';
+        }
+
+        function checkPassword() {
+            const password = document.getElementById('passwordInput').value;
+            if (password === 'aladine123') {
+                closePasswordModal();
+                openAdminPanel();
+            } else {
+                alert('Mot de passe incorrect');
+                document.getElementById('passwordInput').value = '';
+            }
+        }
+
+        function openAdminPanel() {
+            document.getElementById('adminModal').classList.add('show');
+            loadAdminValues();
+            updateBioList();
+            updateAchievementsList();
+            updateVisionList();
+            updateNavList();
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('adminModal').classList.remove('show');
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName + '-tab').classList.add('active');
+        }
+
+        // Load admin values
+        function loadAdminValues() {
+            document.getElementById('logoText').value = pageConfig.general.logoText;
+            document.getElementById('pageTitle').value = pageConfig.general.pageTitle;
+            document.getElementById('profileImageUrl').value = pageConfig.general.profileImage;
+            document.getElementById('profileImageAlt').value = pageConfig.general.profileImageAlt;
+            
+            document.getElementById('achievementsTitle').value = pageConfig.achievements.title;
+            document.getElementById('visionTitle').value = pageConfig.vision.title;
+            
+            document.getElementById('mainFont').value = pageConfig.styles.mainFont;
+            document.getElementById('textColor').value = pageConfig.styles.textColor;
+            document.getElementById('accentColor').value = pageConfig.styles.accentColor;
+            document.getElementById('bgColor').value = pageConfig.styles.bgColor;
+            document.getElementById('titleSize').value = pageConfig.styles.titleSize;
+            document.getElementById('subtitleSize').value = pageConfig.styles.subtitleSize;
+            
+            updateColorPreviews();
+        }
+
+        // General functions
+        function saveGeneral() {
+            pageConfig.general = {
+                logoText: document.getElementById('logoText').value,
+                pageTitle: document.getElementById('pageTitle').value,
+                profileImage: document.getElementById('profileImageUrl').value || pageConfig.general.profileImage,
+                profileImageAlt: document.getElementById('profileImageAlt').value
+            };
+            saveConfig();
+            applyConfig();
+            alert('Configuration générale sauvegardée !');
+        }
+
+        // Bio functions
+        function addBioParagraph() {
+            const text = document.getElementById('newBioParagraph').value;
+            if (text) {
+                pageConfig.bio.push(text);
+                saveConfig();
+                applyConfig();
+                updateBioList();
+                document.getElementById('newBioParagraph').value = '';
+                alert('Paragraphe ajouté !');
+            }
+        }
+
+        function updateBioList() {
+            const list = document.getElementById('bioList');
+            list.innerHTML = '<h4>Paragraphes actuels</h4>';
+            
+            pageConfig.bio.forEach((paragraph, index) => {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.id = `bio-item-${index}`;
+                item.innerHTML = `
+                    <div class="list-item-view">
+                        <div class="list-item-info">
+                            <small>${paragraph.substring(0, 100)}...</small>
+                        </div>
+                        <div class="list-item-actions">
+                            <button class="btn-edit btn-small" onclick="editBio(${index})">Modifier</button>
+                            <button class="btn-danger btn-small" onclick="deleteBio(${index})">Supprimer</button>
+                        </div>
+                    </div>
+                    <div class="list-item-edit">
+                        <div class="edit-form">
+                            <textarea id="edit-bio-${index}">${paragraph}</textarea>
+                            <div class="edit-actions">
+                                <button class="btn-primary btn-small" onclick="saveBioEdit(${index})">Sauvegarder</button>
+                                <button class="btn-danger btn-small" onclick="cancelBioEdit(${index})">Annuler</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function editBio(index) {
+            document.getElementById(`bio-item-${index}`).classList.add('editing');
+        }
+
+        function cancelBioEdit(index) {
+            document.getElementById(`bio-item-${index}`).classList.remove('editing');
+        }
+
+        function saveBioEdit(index) {
+            const text = document.getElementById(`edit-bio-${index}`).value;
+            if (text) {
+                pageConfig.bio[index] = text;
+                saveConfig();
+                applyConfig();
+                updateBioList();
+                alert('Paragraphe modifié !');
+            }
+        }
+
+        function deleteBio(index) {
+            if (confirm('Supprimer ce paragraphe ?')) {
+                pageConfig.bio.splice(index, 1);
+                saveConfig();
+                applyConfig();
+                updateBioList();
+            }
+        }
+
+        // Achievements functions
+        function saveAchievementsTitle() {
+            pageConfig.achievements.title = document.getElementById('achievementsTitle').value;
+            saveConfig();
+            applyConfig();
+            alert('Titre sauvegardé !');
+        }
+
+        function addAchievement() {
+            const year = document.getElementById('achievementYear').value;
+            const desc = document.getElementById('achievementDesc').value;
+            
+            if (year && desc) {
+                pageConfig.achievements.items.push({ year, desc });
+                saveConfig();
+                applyConfig();
+                updateAchievementsList();
+                document.getElementById('achievementYear').value = '';
+                document.getElementById('achievementDesc').value = '';
+                alert('Distinction ajoutée !');
+            }
+        }
+
+        function updateAchievementsList() {
+            const list = document.getElementById('achievementsList');
+            list.innerHTML = '<h4>Distinctions actuelles</h4>';
+            
+            pageConfig.achievements.items.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'list-item';
+                div.id = `achievement-item-${index}`;
+                div.innerHTML = `
+                    <div class="list-item-view">
+                        <div class="list-item-info">
+                            <strong>${item.year}</strong> - ${item.desc}
+                        </div>
+                        <div class="list-item-actions">
+                            <button class="btn-edit btn-small" onclick="editAchievement(${index})">Modifier</button>
+                            <button class="btn-danger btn-small" onclick="deleteAchievement(${index})">Supprimer</button>
+                        </div>
+                    </div>
+                    <div class="list-item-edit">
+                        <div class="edit-form">
+                            <input type="text" id="edit-achievement-year-${index}" value="${item.year}" placeholder="Année">
+                            <input type="text" id="edit-achievement-desc-${index}" value="${item.desc}" placeholder="Description">
+                            <div class="edit-actions">
+                                <button class="btn-primary btn-small" onclick="saveAchievementEdit(${index})">Sauvegarder</button>
+                                <button class="btn-danger btn-small" onclick="cancelAchievementEdit(${index})">Annuler</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function editAchievement(index) {
+            document.getElementById(`achievement-item-${index}`).classList.add('editing');
+        }
+
+        function cancelAchievementEdit(index) {
+            document.getElementById(`achievement-item-${index}`).classList.remove('editing');
+        }
+
+        function saveAchievementEdit(index) {
+            const year = document.getElementById(`edit-achievement-year-${index}`).value;
+            const desc = document.getElementById(`edit-achievement-desc-${index}`).value;
+            
+            if (year && desc) {
+                pageConfig.achievements.items[index] = { year, desc };
+                saveConfig();
+                applyConfig();
+                updateAchievementsList();
+                alert('Distinction modifiée !');
+            }
+        }
+
+        function deleteAchievement(index) {
+            if (confirm('Supprimer cette distinction ?')) {
+                pageConfig.achievements.items.splice(index, 1);
+                saveConfig();
+                applyConfig();
+                updateAchievementsList();
+            }
+        }
+
+        // Vision functions
+        function saveVisionTitle() {
+            pageConfig.vision.title = document.getElementById('visionTitle').value;
+            saveConfig();
+            applyConfig();
+            alert('Titre sauvegardé !');
+        }
+
+        function addVisionParagraph() {
+            const text = document.getElementById('newVisionParagraph').value;
+            if (text) {
+                pageConfig.vision.paragraphs.push(text);
+                saveConfig();
+                applyConfig();
+                updateVisionList();
+                document.getElementById('newVisionParagraph').value = '';
+                alert('Paragraphe ajouté !');
+            }
+        }
+
+        function updateVisionList() {
+            const list = document.getElementById('visionList');
+            list.innerHTML = '<h4>Paragraphes actuels</h4>';
+            
+            pageConfig.vision.paragraphs.forEach((paragraph, index) => {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.id = `vision-item-${index}`;
+                item.innerHTML = `
+                    <div class="list-item-view">
+                        <div class="list-item-info">
+                            <small>${paragraph.substring(0, 100)}...</small>
+                        </div>
+                        <div class="list-item-actions">
+                            <button class="btn-edit btn-small" onclick="editVision(${index})">Modifier</button>
+                            <button class="btn-danger btn-small" onclick="deleteVision(${index})">Supprimer</button>
+                        </div>
+                    </div>
+                    <div class="list-item-edit">
+                        <div class="edit-form">
+                            <textarea id="edit-vision-${index}">${paragraph}</textarea>
+                            <div class="edit-actions">
+                                <button class="btn-primary btn-small" onclick="saveVisionEdit(${index})">Sauvegarder</button>
+                                <button class="btn-danger btn-small" onclick="cancelVisionEdit(${index})">Annuler</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function editVision(index) {
+            document.getElementById(`vision-item-${index}`).classList.add('editing');
+        }
+
+        function cancelVisionEdit(index) {
+            document.getElementById(`vision-item-${index}`).classList.remove('editing');
+        }
+
+        function saveVisionEdit(index) {
+            const text = document.getElementById(`edit-vision-${index}`).value;
+            if (text) {
+                pageConfig.vision.paragraphs[index] = text;
+                saveConfig();
+                applyConfig();
+                updateVisionList();
+                alert('Paragraphe modifié !');
+            }
+        }
+
+        function deleteVision(index) {
+            if (confirm('Supprimer ce paragraphe ?')) {
+                pageConfig.vision.paragraphs.splice(index, 1);
+                saveConfig();
+                applyConfig();
+                updateVisionList();
+            }
+        }
+
+        // Navigation functions
+        function addNavItem() {
+            const text = document.getElementById('navText').value;
+            const url = document.getElementById('navUrl').value;
+            
+            if (text && url) {
+                pageConfig.navigation.push({ text, url, active: false });
+                saveConfig();
+                applyConfig();
+                updateNavList();
+                document.getElementById('navText').value = '';
+                document.getElementById('navUrl').value = '';
+                alert('Lien ajouté !');
+            }
+        }
+
+        function updateNavList() {
+            const list = document.getElementById('navList');
+            list.innerHTML = '<h4>Liens actuels</h4>';
+            
+            pageConfig.navigation.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'list-item';
+                div.id = `nav-item-${index}`;
+                div.innerHTML = `
+                    <div class="list-item-view">
+                        <div class="list-item-info">
+                            <strong>${item.text}</strong> - ${item.url}
+                            ${item.active ? '<span style="color: #d4af37;"> (Actif)</span>' : ''}
+                        </div>
+                        <div class="list-item-actions">
+                            <button class="btn-edit btn-small" onclick="editNavItem(${index})">Modifier</button>
+                            <button class="btn-danger btn-small" onclick="deleteNavItem(${index})">Supprimer</button>
+                        </div>
+                    </div>
+                    <div class="list-item-edit">
+                        <div class="edit-form">
+                            <input type="text" id="edit-nav-text-${index}" value="${item.text}" placeholder="Texte">
+                            <input type="text" id="edit-nav-url-${index}" value="${item.url}" placeholder="URL">
+                            <div class="edit-actions">
+                                <button class="btn-primary btn-small" onclick="saveNavEdit(${index})">Sauvegarder</button>
+                                <button class="btn-danger btn-small" onclick="cancelNavEdit(${index})">Annuler</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function editNavItem(index) {
+            document.getElementById(`nav-item-${index}`).classList.add('editing');
+        }
+
+        function cancelNavEdit(index) {
+            document.getElementById(`nav-item-${index}`).classList.remove('editing');
+        }
+
+        function saveNavEdit(index) {
+            const text = document.getElementById(`edit-nav-text-${index}`).value;
+            const url = document.getElementById(`edit-nav-url-${index}`).value;
+            
+            if (text && url) {
+                pageConfig.navigation[index].text = text;
+                pageConfig.navigation[index].url = url;
+                saveConfig();
+                applyConfig();
+                updateNavList();
+                alert('Lien modifié !');
+            }
+        }
+
+        function deleteNavItem(index) {
+            if (confirm('Supprimer ce lien ?')) {
+                pageConfig.navigation.splice(index, 1);
+                saveConfig();
+                applyConfig();
+                updateNavList();
+            }
+        }
+
+        // Styles functions
+        function saveStyles() {
+            pageConfig.styles = {
+                mainFont: document.getElementById('mainFont').value,
+                textColor: document.getElementById('textColor').value,
+                accentColor: document.getElementById('accentColor').value,
+                bgColor: document.getElementById('bgColor').value,
+                titleSize: parseFloat(document.getElementById('titleSize').value),
+                subtitleSize: parseFloat(document.getElementById('subtitleSize').value)
+            };
+            saveConfig();
+            applyConfig();
+            alert('Styles sauvegardés !');
+        }
+
+        function resetStyles() {
+            pageConfig.styles = {
+                mainFont: 'Arial',
+                textColor: '#ffffff',
+                accentColor: '#d4af37',
+                bgColor: '#000000',
+                titleSize: 2.5,
+                subtitleSize: 1.8
+            };
+            saveConfig();
+            applyConfig();
+            loadAdminValues();
+            alert('Styles réinitialisés !');
+        }
+
+        // Color preview updates
+        function updateColorPreviews() {
+            document.getElementById('textColorPreview').textContent = document.getElementById('textColor').value;
+            document.getElementById('accentColorPreview').textContent = document.getElementById('accentColor').value;
+            document.getElementById('bgColorPreview').textContent = document.getElementById('bgColor').value;
+        }
+
+        document.getElementById('textColor').addEventListener('input', function(e) {
+            document.getElementById('textColorPreview').textContent = e.target.value;
+        });
+
+        document.getElementById('accentColor').addEventListener('input', function(e) {
+            document.getElementById('accentColorPreview').textContent = e.target.value;
+        });
+
+        document.getElementById('bgColor').addEventListener('input', function(e) {
+            document.getElementById('bgColorPreview').textContent = e.target.value;
+        });
+
+        // Password input enter key
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadConfig();
+        });
+    </script>
 </body>
 </html>
