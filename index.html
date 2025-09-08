@@ -572,9 +572,9 @@
             }
             
             .navigation a {
-                font-size: 0.9rem;
-                margin: 8px 0;
-                padding: 5px 0;
+                font-size: 0.85rem;
+                margin: 4px 0;
+                padding: 3px 0;
             }
 
             .admin-panel {
@@ -729,7 +729,7 @@
                 </div>
                 <div class="form-group">
                     <label>URL</label>
-                    <input type="text" id="navUrl" placeholder="/pages/nom-de-page.html" />
+                    <input type="text" id="navUrl" placeholder="pages/nom-de-page.html" />
                 </div>
                 <div class="form-group">
                     <label>Police de navigation</label>
@@ -845,12 +845,12 @@
             ],
             navigation: {
                 items: [
-                    { id: 'nav1', text: 'Aladine', url: '/pages/aladine.html' },
-                    { id: 'nav2', text: 'Atelier', url: '/pages/atelier.html' },
-                    { id: 'nav3', text: 'Projets', url: '/pages/projets.html' },
-                    { id: 'nav4', text: 'Contact', url: '/pages/contact.html' },
-                    { id: 'nav5', text: 'Nous rejoindre', url: '/pages/rejoindre.html' },
-                    { id: 'nav6', text: 'Rechercher', url: '/pages/recherche.html' }
+                    { id: 'nav1', text: 'Aladine', url: 'pages/aladine.html' },
+                    { id: 'nav2', text: 'Atelier', url: 'pages/atelier.html' },
+                    { id: 'nav3', text: 'Projets', url: 'pages/projets.html' },
+                    { id: 'nav4', text: 'Contact', url: 'pages/contact.html' },
+                    { id: 'nav5', text: 'Nous rejoindre', url: 'pages/rejoindre.html' },
+                    { id: 'nav6', text: 'Rechercher', url: 'pages/recherche.html' }
                 ],
                 font: 'Arial',
                 size: 0.75,
@@ -1291,7 +1291,7 @@
                     <div class="list-item-edit">
                         <div class="edit-form">
                             <input type="text" id="edit-nav-text-${index}" value="${item.text}" placeholder="Texte du lien">
-                            <input type="text" id="edit-nav-url-${index}" value="${item.url}" placeholder="/pages/nom-de-page.html">
+                            <input type="text" id="edit-nav-url-${index}" value="${item.url}" placeholder="pages/nom-de-page.html">
                             <div class="edit-actions">
                                 <button class="btn-primary btn-small" onclick="saveNavEdit(${index})">Sauvegarder</button>
                                 <button class="btn-danger btn-small" onclick="cancelNavEdit(${index})">Annuler</button>
