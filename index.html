@@ -612,7 +612,12 @@
         </div>
         
         <div class="navigation" id="navigation">
-            <!-- Navigation will be loaded dynamically -->
+            <a href="pages/aladine.html">Aladine</a>
+            <a href="pages/atelier.html">Atelier</a>
+            <a href="pages/projets.html">Projets</a>
+            <a href="pages/contact.html">Contact</a>
+            <a href="pages/rejoindre.html">Nous rejoindre</a>
+            <a href="pages/recherche.html">Rechercher</a>
         </div>
     </div>
 
@@ -848,12 +853,12 @@
             ],
             navigation: {
                 items: [
-                    { id: 'nav1', text: 'Aladine', url: '/pages/aladine.html' },
-                    { id: 'nav2', text: 'Atelier', url: '/pages/atelier.html' },
-                    { id: 'nav3', text: 'Projets', url: '/pages/projets.html' },
-                    { id: 'nav4', text: 'Contact', url: '/pages/contact.html' },
-                    { id: 'nav5', text: 'Nous rejoindre', url: '/pages/rejoindre.html' },
-                    { id: 'nav6', text: 'Rechercher', url: '/pages/recherche.html' }
+                    { id: 'nav1', text: 'Aladine', url: 'pages/aladine.html' },
+                    { id: 'nav2', text: 'Atelier', url: 'pages/atelier.html' },
+                    { id: 'nav3', text: 'Projets', url: 'pages/projets.html' },
+                    { id: 'nav4', text: 'Contact', url: 'pages/contact.html' },
+                    { id: 'nav5', text: 'Nous rejoindre', url: 'pages/rejoindre.html' },
+                    { id: 'nav6', text: 'Rechercher', url: 'pages/recherche.html' }
                 ],
                 font: 'Arial',
                 size: 0.75,
@@ -943,8 +948,6 @@
             if (siteConfig.firebase && siteConfig.firebase.apiKey) {
                 initFirebase();
             }
-            
-            applyConfig();
         }
 
         // Save configuration
@@ -1017,7 +1020,7 @@
                 slider.appendChild(slide);
             });
 
-            // Apply navigation
+            // Apply navigation - replace HTML with dynamic content
             const nav = document.getElementById('navigation');
             nav.innerHTML = '';
             siteConfig.navigation.items.forEach(item => {
@@ -1027,13 +1030,6 @@
                 link.style.fontFamily = siteConfig.navigation.font;
                 link.style.fontSize = siteConfig.navigation.size + 'rem';
                 link.style.color = siteConfig.navigation.color;
-                
-                // Force correct navigation on mobile
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    window.location.href = item.url;
-                });
-                
                 nav.appendChild(link);
             });
 
@@ -1081,6 +1077,11 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Clean URL first
             cleanUrl();
+            
+            // Apply config after a short delay to ensure everything is loaded
+            setTimeout(() => {
+                applyConfig();
+            }, 100);
             
             const mainTitle = document.getElementById('main-title');
             mainTitle.addEventListener('click', function(e) {
