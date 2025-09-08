@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Deen Designer | Aladine Atelier</title>
     
     <!-- Firebase SDK -->
@@ -1024,6 +1027,13 @@
                 link.style.fontFamily = siteConfig.navigation.font;
                 link.style.fontSize = siteConfig.navigation.size + 'rem';
                 link.style.color = siteConfig.navigation.color;
+                
+                // Force correct navigation on mobile
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = item.url;
+                });
+                
                 nav.appendChild(link);
             });
 
@@ -1054,7 +1064,24 @@
         let clickCount = 0;
         let clickTimer;
 
+        // Clean URL on page load to prevent hash navigation issues
+        function cleanUrl() {
+            if (window.location.hash) {
+                const hash = window.location.hash.substring(1);
+                const validPages = ['aladine', 'atelier', 'projets', 'contact', 'rejoindre', 'recherche'];
+                
+                if (validPages.includes(hash)) {
+                    // Redirect to proper page
+                    window.location.href = `pages/${hash}.html`;
+                    return;
+                }
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
+            // Clean URL first
+            cleanUrl();
+            
             const mainTitle = document.getElementById('main-title');
             mainTitle.addEventListener('click', function(e) {
                 e.preventDefault();
