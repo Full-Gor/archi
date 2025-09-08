@@ -40,6 +40,24 @@
             font-family: 'Arial', sans-serif;
             overflow: hidden;
         }
+        
+        @media (max-width: 768px) {
+            body, html {
+                overflow: auto;
+                min-height: 100vh;
+            }
+            
+            .mobile-scroll-space {
+                height: 200px;
+                width: 100%;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            .mobile-scroll-space {
+                display: none;
+            }
+        }
 
         /* Simplified Smoke Animation for Better Performance */
         .loader-container {
@@ -619,6 +637,9 @@
             <a href="pages/rejoindre.html">Nous rejoindre</a>
             <a href="pages/recherche.html">Rechercher</a>
         </div>
+        
+        <!-- Espace pour permettre le scroll sur mobile -->
+        <div class="mobile-scroll-space"></div>
     </div>
 
     <!-- Sync Indicator -->
