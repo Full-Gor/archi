@@ -3,9 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Aladine - Aladine Atelier</title>
     
-    <!-- Google Fonts pour styles variés -->
+    <!-- Supabase et bcrypt -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
+    <script src="/js/supabase-config.js"></script>
+    
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
@@ -171,6 +179,22 @@
             font-weight: bold;
             color: #d4af37;
             margin-bottom: 5px;
+        }
+
+        /* Boutons */
+        .custom-button {
+            position: absolute;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .custom-button:hover {
+            opacity: 0.9;
         }
 
         /* Modal Styles */
@@ -504,6 +528,21 @@
             flex-wrap: wrap;
         }
 
+        .sync-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 5px;
+            display: none;
+            z-index: 3000;
+        }
+
+        .sync-indicator.show {
+            display: block;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .container {
@@ -611,66 +650,35 @@
             <div class="logo">
                 <a id="logo-text">Aladine Atelier</a>
             </div>
-            <div class="navigation" id="navigation">
-                <a href="/index.html">Accueil</a>
-                <a href="/pages/aladine.html" class="active">Aladine</a>
-                <a href="/pages/atelier.html">Atelier</a>
-                <a href="/pages/projets.html">Projets</a>
-                <a href="/pages/contact.html">Contact</a>
-                <a href="/pages/rejoindre.html">Nous rejoindre</a>
-                <a href="/pages/recherche.html">Rechercher</a>
-            </div>
+            <div class="navigation" id="navigation"></div>
+        </div>
         
         <h1 id="page-title">Aladine</h1>
         
         <div class="content">
             <div class="bio">
-                <div id="bio-content">
-                    <p>Fondateur et visionnaire derrière Aladine Atelier, Aladine Mahmoud est un architecte internationalement reconnu dont le travail transcende les conventions traditionnelles de l'architecture.</p>
-                    
-                    <p>Né à Beyrouth et formé à l'École Spéciale d'Architecture de Paris, Aladine a développé une approche unique qui marie l'esthétique contemporaine avec les principes durables et les influences culturelles diverses.</p>
-                    
-                    <p>Sa philosophie de design s'articule autour de trois principes fondamentaux : la durabilité environnementale, l'intégration culturelle et l'innovation technique. Chacun de ses projets raconte une histoire unique, créant un dialogue entre l'espace, l'environnement et les personnes qui l'habitent.</p>
-                </div>
+                <div id="bio-content"></div>
                 
                 <div class="achievements">
                     <h2 id="achievements-title">Distinctions</h2>
-                    
-                    <div id="achievements-list">
-                        <div class="achievement">
-                            <div class="achievement-year">2023</div>
-                            <div>Prix Pritzker d'Architecture - Nomination</div>
-                        </div>
-                        
-                        <div class="achievement">
-                            <div class="achievement-year">2021</div>
-                            <div>Médaille d'Or de l'Académie d'Architecture</div>
-                        </div>
-                        
-                        <div class="achievement">
-                            <div class="achievement-year">2019</div>
-                            <div>Grand Prix AFEX de l'Architecture Française à l'Export</div>
-                        </div>
-                        
-                        <div class="achievement">
-                            <div class="achievement-year">2016</div>
-                            <div>Prix Aga Khan d'Architecture</div>
-                        </div>
-                    </div>
+                    <div id="achievements-list"></div>
                 </div>
             </div>
             
             <div class="profile">
                 <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=500&h=600&fit=crop" alt="Architecte travaillant sur des plans" class="profile-image" id="profile-image">
-                
                 <h2 id="vision-title">Vision</h2>
-                <div id="vision-content">
-                    <p>"L'architecture n'est pas simplement l'art de construire des bâtiments, c'est l'art de créer des expériences, de façonner des émotions et de laisser un impact durable sur le monde qui nous entoure. Chaque projet est une opportunité de redéfinir notre relation à l'espace et à l'environnement."</p>
-                    
-                    <p>"Je crois fermement que l'architecture a le pouvoir de transformer positivement la vie des gens, de catalyser le changement social et de contribuer à un avenir plus durable pour notre planète."</p>
-                </div>
+                <div id="vision-content"></div>
             </div>
         </div>
+
+        <!-- Boutons -->
+        <div id="custom-buttons"></div>
+    </div>
+
+    <!-- Sync Indicator -->
+    <div class="sync-indicator" id="syncIndicator">
+        <span id="syncStatus">Synchronisation...</span>
     </div>
 
     <!-- Password Modal -->
@@ -698,6 +706,7 @@
                 <button class="admin-tab" onclick="switchTab('vision')">Vision</button>
                 <button class="admin-tab" onclick="switchTab('navigation')">Navigation</button>
                 <button class="admin-tab" onclick="switchTab('styles')">Styles</button>
+                <button class="admin-tab" onclick="switchTab('buttons')">Boutons</button>
             </div>
 
             <!-- General Tab -->
@@ -716,8 +725,20 @@
                     <input type="text" id="profileImageUrl" placeholder="URL de l'image" />
                 </div>
                 <div class="form-group">
+                    <label>Ou uploader une image (PNG/JPG)</label>
+                    <input type="file" id="profileImageFile" accept="image/png, image/jpeg" />
+                </div>
+                <div class="form-group">
                     <label>Texte alternatif de l'image</label>
                     <input type="text" id="profileImageAlt" value="Architecte travaillant sur des plans" />
+                </div>
+                <div class="form-group">
+                    <label>Position Gauche (px)</label>
+                    <input type="number" id="profileImageLeft" value="0" min="0" />
+                </div>
+                <div class="form-group">
+                    <label>Position Haut (px)</label>
+                    <input type="number" id="profileImageTop" value="0" min="0" />
                 </div>
                 <button class="btn-primary" onclick="saveGeneral()">Sauvegarder</button>
             </div>
@@ -730,7 +751,6 @@
                     <textarea id="newBioParagraph" placeholder="Entrez le texte du paragraphe..."></textarea>
                 </div>
                 <button class="btn-primary" onclick="addBioParagraph()">Ajouter Paragraphe</button>
-                
                 <div class="bio-list" id="bioList">
                     <h4>Paragraphes actuels</h4>
                 </div>
@@ -753,7 +773,6 @@
                 </div>
                 <button class="btn-primary" onclick="addAchievement()">Ajouter Distinction</button>
                 <button class="btn-primary" onclick="saveAchievementsTitle()">Sauvegarder Titre</button>
-                
                 <div class="achievements-list" id="achievementsList">
                     <h4>Distinctions actuelles</h4>
                 </div>
@@ -772,7 +791,6 @@
                 </div>
                 <button class="btn-primary" onclick="addVisionParagraph()">Ajouter Paragraphe</button>
                 <button class="btn-primary" onclick="saveVisionTitle()">Sauvegarder Titre</button>
-                
                 <div class="vision-list" id="visionList">
                     <h4>Paragraphes actuels</h4>
                 </div>
@@ -787,10 +805,48 @@
                 </div>
                 <div class="form-group">
                     <label>URL</label>
-                    <input type="text" id="navUrl" placeholder="page.html ou #section" />
+                    <input type="text" id="navUrl" placeholder="pages/nom-de-page.html" />
+                </div>
+                <div class="form-group">
+                    <label>Police de navigation</label>
+                    <select id="navFont">
+                        <option value="Arial">Arial (Classique)</option>
+                        <option value="Georgia">Georgia (Élégant)</option>
+                        <option value="Times New Roman">Times New Roman (Traditionnel)</option>
+                        <option value="Courier New">Courier New (Machine à écrire)</option>
+                        <option value="Verdana">Verdana (Moderne)</option>
+                        <option value="UnifrakturMaguntia">UnifrakturMaguntia (Gothique)</option>
+                        <option value="Cinzel">Cinzel (Renaissance)</option>
+                        <option value="Almendra">Almendra (Médiéval)</option>
+                        <option value="Orbitron">Orbitron (Cyberpunk)</option>
+                        <option value="Audiowide">Audiowide (Tech)</option>
+                        <option value="Megrim">Megrim (Néon)</option>
+                        <option value="Bungee">Bungee (Arcade)</option>
+                        <option value="Pirata One">Pirata One (Pirate)</option>
+                        <option value="Monoton">Monoton (Rétro Néon)</option>
+                        <option value="Libre Barcode 39 Text">Libre Barcode (Code-barres)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Taille (rem)</label>
+                    <input type="number" id="navSize" value="0.9" min="0.5" max="3" step="0.25" />
+                </div>
+                <div class="form-group">
+                    <label>Couleur</label>
+                    <div class="color-picker-wrapper">
+                        <input type="color" id="navColor" value="#ffffff" />
+                        <span class="color-preview" id="navColorPreview">#ffffff</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Couleur au survol</label>
+                    <div class="color-picker-wrapper">
+                        <input type="color" id="navHoverColor" value="#d4af37" />
+                        <span class="color-preview" id="navHoverColorPreview">#d4af37</span>
+                    </div>
                 </div>
                 <button class="btn-primary" onclick="addNavItem()">Ajouter Lien</button>
-                
+                <button class="btn-primary" onclick="saveNavStyle()">Sauvegarder Style</button>
                 <div class="nav-list" id="navList">
                     <h4>Liens actuels</h4>
                 </div>
@@ -799,7 +855,6 @@
             <!-- Styles Tab -->
             <div class="tab-content" id="styles-tab">
                 <h3>Configuration des Styles</h3>
-                
                 <h4>Polices</h4>
                 <div class="form-group">
                     <label>Police principale</label>
@@ -817,7 +872,46 @@
                         <option value="Bungee">Bungee (Arcade)</option>
                     </select>
                 </div>
-                
+                <div class="form-group">
+                    <label>Police du logo</label>
+                    <select id="logoFont">
+                        <option value="Arial">Arial (Classique)</option>
+                        <option value="Georgia">Georgia (Élégant)</option>
+                        <option value="Times New Roman">Times New Roman (Traditionnel)</option>
+                        <option value="Courier New">Courier New (Machine à écrire)</option>
+                        <option value="Verdana">Verdana (Moderne)</option>
+                        <option value="UnifrakturMaguntia">UnifrakturMaguntia (Gothique)</option>
+                        <option value="Cinzel">Cinzel (Renaissance)</option>
+                        <option value="Almendra">Almendra (Médiéval)</option>
+                        <option value="Orbitron">Orbitron (Cyberpunk)</option>
+                        <option value="Audiowide">Audiowide (Tech)</option>
+                        <option value="Megrim">Megrim (Néon)</option>
+                        <option value="Bungee">Bungee (Arcade)</option>
+                        <option value="Pirata One">Pirata One (Pirate)</option>
+                        <option value="Monoton">Monoton (Rétro Néon)</option>
+                        <option value="Libre Barcode 39 Text">Libre Barcode (Code-barres)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Police du titre principal</label>
+                    <select id="titleFont">
+                        <option value="Arial">Arial (Classique)</option>
+                        <option value="Georgia">Georgia (Élégant)</option>
+                        <option value="Times New Roman">Times New Roman (Traditionnel)</option>
+                        <option value="Courier New">Courier New (Machine à écrire)</option>
+                        <option value="Verdana">Verdana (Moderne)</option>
+                        <option value="UnifrakturMaguntia">UnifrakturMaguntia (Gothique)</option>
+                        <option value="Cinzel">Cinzel (Renaissance)</option>
+                        <option value="Almendra">Almendra (Médiéval)</option>
+                        <option value="Orbitron">Orbitron (Cyberpunk)</option>
+                        <option value="Audiowide">Audiowide (Tech)</option>
+                        <option value="Megrim">Megrim (Néon)</option>
+                        <option value="Bungee">Bungee (Arcade)</option>
+                        <option value="Pirata One">Pirata One (Pirate)</option>
+                        <option value="Monoton">Monoton (Rétro Néon)</option>
+                        <option value="Libre Barcode 39 Text">Libre Barcode (Code-barres)</option>
+                    </select>
+                </div>
                 <h4>Couleurs</h4>
                 <div class="form-group">
                     <label>Couleur du texte principal</label>
@@ -826,7 +920,6 @@
                         <span class="color-preview" id="textColorPreview">#ffffff</span>
                     </div>
                 </div>
-                
                 <div class="form-group">
                     <label>Couleur d'accent (titres, hover)</label>
                     <div class="color-picker-wrapper">
@@ -834,7 +927,6 @@
                         <span class="color-preview" id="accentColorPreview">#d4af37</span>
                     </div>
                 </div>
-                
                 <div class="form-group">
                     <label>Couleur de fond</label>
                     <div class="color-picker-wrapper">
@@ -842,104 +934,518 @@
                         <span class="color-preview" id="bgColorPreview">#000000</span>
                     </div>
                 </div>
-                
                 <h4>Tailles</h4>
                 <div class="form-group">
                     <label>Taille du titre principal (rem)</label>
                     <input type="number" id="titleSize" value="2.5" min="1" max="5" step="0.1" />
                 </div>
-                
                 <div class="form-group">
                     <label>Taille des sous-titres (rem)</label>
                     <input type="number" id="subtitleSize" value="1.8" min="1" max="3" step="0.1" />
                 </div>
-                
+                <div class="form-group">
+                    <label>Taille du logo (rem)</label>
+                    <input type="number" id="logoSize" value="2" min="1" max="5" step="0.1" />
+                </div>
                 <button class="btn-primary" onclick="saveStyles()">Sauvegarder les Styles</button>
                 <button class="btn-danger" onclick="resetStyles()">Réinitialiser</button>
+            </div>
+
+            <!-- Buttons Tab -->
+            <div class="tab-content" id="buttons-tab">
+                <h3>Gestion des Boutons</h3>
+                <div class="form-group">
+                    <label>Texte du bouton</label>
+                    <input type="text" id="buttonText" placeholder="Texte du bouton" />
+                </div>
+                <div class="form-group">
+                    <label>URL (optionnel)</label>
+                    <input type="text" id="buttonUrl" placeholder="pages/nom-de-page.html" />
+                </div>
+                <div class="form-group">
+                    <label>Couleur</label>
+                    <div class="color-picker-wrapper">
+                        <input type="color" id="buttonColor" value="#d4af37" />
+                        <span class="color-preview" id="buttonColorPreview">#d4af37</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Position Gauche (px)</label>
+                    <input type="number" id="buttonLeft" value="100" min="0" />
+                </div>
+                <div class="form-group">
+                    <label>Position Haut (px)</label>
+                    <input type="number" id="buttonTop" value="100" min="0" />
+                </div>
+                <button class="btn-primary" onclick="addButton()">Ajouter Bouton</button>
+                <div class="button-list" id="buttonList">
+                    <h4>Boutons actuels</h4>
+                </div>
             </div>
         </div>
     </div>
     
     <script>
-        // Configuration Storage
-        const pageConfig = {
+        // Initialize Supabase when scripts are loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof initSupabase === 'function') {
+                initSupabase();
+            }
+        });
+        
+        // Hash bcrypt (même que index.html)
+       // const storedHash = "$2a$10$3s7z9Qw1KxP2mW8vZ3jL0e9uY6kL2Qw9P7xZ3mW8vY9Qw1KxP2mW8";
+
+        // Configuration par défaut
+        const defaultConfig = {
             general: {
                 logoText: 'Aladine Atelier',
                 pageTitle: 'Aladine',
                 profileImage: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=500&h=600&fit=crop',
-                profileImageAlt: 'Architecte travaillant sur des plans'
+                profileImageAlt: 'Architecte travaillant sur des plans',
+                profileImageLeft: 0,
+                profileImageTop: 0
             },
             bio: [
-                "Fondateur et visionnaire derrière Aladine Atelier, Aladine Mahmoud est un architecte internationalement reconnu dont le travail transcende les conventions traditionnelles de l'architecture.",
-                "Né à Beyrouth et formé à l'École Spéciale d'Architecture de Paris, Aladine a développé une approche unique qui marie l'esthétique contemporaine avec les principes durables et les influences culturelles diverses.",
-                "Sa philosophie de design s'articule autour de trois principes fondamentaux : la durabilité environnementale, l'intégration culturelle et l'innovation technique. Chacun de ses projets raconte une histoire unique, créant un dialogue entre l'espace, l'environnement et les personnes qui l'habitent."
+                {
+                    id: 'bio1',
+                    text: "Fondateur et visionnaire derrière Aladine Atelier, Aladine Mahmoud est un architecte internationalement reconnu dont le travail transcende les conventions traditionnelles de l'architecture.",
+                    order: 0
+                },
+                {
+                    id: 'bio2',
+                    text: "Né à Beyrouth et formé à l'École Spéciale d'Architecture de Paris, Aladine a développé une approche unique qui marie l'esthétique contemporaine avec les principes durables et les influences culturelles diverses.",
+                    order: 1
+                },
+                {
+                    id: 'bio3',
+                    text: "Sa philosophie de design s'articule autour de trois principes fondamentaux : la durabilité environnementale, l'intégration culturelle et l'innovation technique. Chacun de ses projets raconte une histoire unique, créant un dialogue entre l'espace, l'environnement et les personnes qui l'habitent.",
+                    order: 2
+                }
             ],
             achievements: {
                 title: 'Distinctions',
                 items: [
-                    { year: '2023', desc: "Prix Pritzker d'Architecture - Nomination" },
-                    { year: '2021', desc: "Médaille d'Or de l'Académie d'Architecture" },
-                    { year: '2019', desc: "Grand Prix AFEX de l'Architecture Française à l'Export" },
-                    { year: '2016', desc: "Prix Aga Khan d'Architecture" }
+                    { id: 'ach1', year: '2023', desc: "Prix Pritzker d'Architecture - Nomination", order: 0 },
+                    { id: 'ach2', year: '2021', desc: "Médaille d'Or de l'Académie d'Architecture", order: 1 },
+                    { id: 'ach3', year: '2019', desc: "Grand Prix AFEX de l'Architecture Française à l'Export", order: 2 },
+                    { id: 'ach4', year: '2016', desc: "Prix Aga Khan d'Architecture", order: 3 }
                 ]
             },
             vision: {
                 title: 'Vision',
                 paragraphs: [
-                    "\"L'architecture n'est pas simplement l'art de construire des bâtiments, c'est l'art de créer des expériences, de façonner des émotions et de laisser un impact durable sur le monde qui nous entoure. Chaque projet est une opportunité de redéfinir notre relation à l'espace et à l'environnement.\"",
-                    "\"Je crois fermement que l'architecture a le pouvoir de transformer positivement la vie des gens, de catalyser le changement social et de contribuer à un avenir plus durable pour notre planète.\""
+                    {
+                        id: 'vis1',
+                        text: "\"L'architecture n'est pas simplement l'art de construire des bâtiments, c'est l'art de créer des expériences, de façonner des émotions et de laisser un impact durable sur le monde qui nous entoure. Chaque projet est une opportunité de redéfinir notre relation à l'espace et à l'environnement.\"",
+                        order: 0
+                    },
+                    {
+                        id: 'vis2',
+                        text: "\"Je crois fermement que l'architecture a le pouvoir de transformer positivement la vie des gens, de catalyser le changement social et de contribuer à un avenir plus durable pour notre planète.\"",
+                        order: 1
+                    }
                 ]
             },
-            navigation: [
-        { text: 'Accueil', url: '/index.html' },
-        { text: 'Aladine', url: '/pages/aladine.html', active: true },
-        { text: 'Atelier', url: '/pages/atelier.html' },
-        { text: 'Projets', url: '/pages/projets.html' },
-        { text: 'Contact', url: '/pages/contact.html' },
-        { text: 'Nous rejoindre', url: '/pages/rejoindre.html' },
-        { text: 'Rechercher', url: '/pages/recherche.html' }
-    ],
+            navigation: {
+                items: [
+                    { id: 'nav1', text: 'Accueil', url: '/index.html', active: false, order: 0 },
+                    { id: 'nav2', text: 'Aladine', url: '/pages/aladine.html', active: true, order: 1 },
+                    { id: 'nav3', text: 'Atelier', url: '/pages/atelier.html', active: false, order: 2 },
+                    { id: 'nav4', text: 'Projets', url: '/pages/projets.html', active: false, order: 3 },
+                    { id: 'nav5', text: 'Contact', url: '/pages/contact.html', active: false, order: 4 },
+                    { id: 'nav6', text: 'Nous rejoindre', url: '/pages/rejoindre.html', active: false, order: 5 },
+                    { id: 'nav7', text: 'Rechercher', url: '/pages/recherche.html', active: false, order: 6 }
+                ],
+                font: 'Arial',
+                size: 0.9,
+                color: '#ffffff',
+                hoverColor: '#d4af37'
+            },
             styles: {
                 mainFont: 'Arial',
+                logoFont: 'Arial',
+                titleFont: 'Arial',
                 textColor: '#ffffff',
                 accentColor: '#d4af37',
                 bgColor: '#000000',
                 titleSize: 2.5,
-                subtitleSize: 1.8
-            }
+                subtitleSize: 1.8,
+                logoSize: 2
+            },
+            buttons: [
+                { id: 'btn1', text: 'Contactez-nous', url: '/pages/contact.html', color: '#d4af37', left: 100, top: 100 }
+            ]
         };
 
-        // Load saved configuration
-        function loadConfig() {
-            const saved = localStorage.getItem('aladinePageConfig');
-            if (saved) {
-                Object.assign(pageConfig, JSON.parse(saved));
-                applyConfig();
+        let pageConfig = JSON.parse(JSON.stringify(defaultConfig));
+
+        // Supabase Functions
+        async function loadSiteConfig() {
+            try {
+                const { data, error } = await supabase.from('site_config').select('*').eq('id', 1).single();
+                if (error) throw error;
+                return data.config;
+            } catch (error) {
+                console.error('Error loading config:', error);
+                return null;
             }
         }
 
-        // Save configuration
-        function saveConfig() {
-            localStorage.setItem('aladinePageConfig', JSON.stringify(pageConfig));
+        async function saveSiteConfig(key, value) {
+            try {
+                const { data, error } = await supabase.from('site_config').select('*').eq('id', 1).single();
+                if (error && error.code !== 'PGRST116') throw error;
+
+                let config = data ? data.config : {};
+                config[key] = value;
+
+                const { error: updateError } = await supabase.from('site_config')
+                    .upsert({ id: 1, config }, { onConflict: 'id' });
+                if (updateError) throw updateError;
+            } catch (error) {
+                console.error('Error saving config:', error);
+                showSyncIndicator('Erreur lors de la sauvegarde', 'error');
+            }
         }
 
-        // Apply configuration to page
+        async function loadNavigationItems() {
+            try {
+                const { data, error } = await supabase.from('navigation_items').select('*').order('order');
+                if (error) throw error;
+                return data;
+            } catch (error) {
+                console.error('Error loading navigation:', error);
+                return defaultConfig.navigation.items;
+            }
+        }
+
+        async function addNavItem(text, url, order) {
+            try {
+                const { error } = await supabase.from('navigation_items').insert({
+                    id: 'nav' + Date.now(),
+                    text,
+                    url,
+                    active: false,
+                    order
+                });
+                if (error) throw error;
+            } catch (error) {
+                console.error('Error adding nav item:', error);
+                showSyncIndicator('Erreur lors de l\'ajout du lien', 'error');
+            }
+        }
+
+        async function updateNavItem(id, text, url) {
+            try {
+                const { error } = await supabase.from('navigation_items')
+                    .update({ text, url })
+                    .eq('id', id);
+                if (error) throw error;
+            } catch (error) {
+                console.error('Error updating nav item:', error);
+                showSyncIndicator('Erreur lors de la modification du lien', 'error');
+            }
+        }
+
+        async function deleteNavItem(id) {
+            try {
+                const { error } = await supabase.from('navigation_items').delete().eq('id', id);
+                if (error) throw error;
+            } catch (error) {
+                console.error('Error deleting nav item:', error);
+                showSyncIndicator('Erreur lors de la suppression du lien', 'error');
+            }
+        }
+
+        async function loadBioParagraphs() {
+            try {
+                const { data, error } = await supabase.from('bio_paragraphs').select('*').order('order');
+                if (error) throw error;
+                return data;
+            } catch (error) {
+                console.error('Error loading bio paragraphs:', error);
+                return defaultConfig.bio;
+            }
+        }
+
+        async function addBioParagraph(text, order) {
+            try {
+                const { error } = await supabase.from('bio_paragraphs').insert({
+                    id: 'bio' + Date.now(),
+                    text,
+                    order
+                });
+                if (error) throw error;
+            } catch (error) {
+                console.error('Error adding bio paragraph:', error);
+                showSyncIndicator('Erreur lors de l\'ajout du paragraphe', 'error');
+            }
+        }
+
+        async function updateBioParagraph(id, text) {
+            try {
+                const { error } = await supabase.from('bio_paragraphs')
+                    .update({ text })
+                    .eq('id', id);
+                if (error) throw error;
+            } catch (error) {
+                console.error('Error updating bio paragraph:', error);
+                showSyncIndicator('Erreur lors de la modification du paragraphe', 'error');
+            }
+        }
+
+        async function deleteBioParagraph(id) {
+            try {
+                const { error } = await supabase.from('bio_paragraphs').delete().eq('id', id);
+                if (error) throw error;
+            } catch (error) {
+                console.error('Error deleting bio paragraph:', error);
+                showSyncIndicator('Erreur lors de la suppression du paragraphe', 'error');
+            }
+        }
+
+        async function loadAchievements() {
+            try {
+                const { data, error } = await supabase.from('achievements').select('*').order('order');
+                if (error) throw error;
+                return data;
+            } catch (error) {
+                console.error('Error loading achievements:', error);
+                return defaultConfig.achievements.items;
+            }
+        }
+
+        async function addAchievement(year, desc, order) {
+            try {
+                const { error } = await supabase.from('achievements').insert({
+                    id: 'ach' + Date.now(),
+                    year,
+                    desc,
+                    order
+                });
+                if (error) throw error;
+            } catch (error) {
+                console.error('Error adding achievement:', error);
+                showSyncIndicator('Erreur lors de l\'ajout de la distinction', 'error');
+            }
+        }
+
+        async function updateAchievement(id, year, desc) {
+            try {
+                const { error } = await supabase.from('achievements')
+                    .update({ year, desc })
+                    .eq('id', id);
+                if (error) throw error;
+            } catch (error) {
+                console.error('Error updating achievement:', error);
+                showSyncIndicator('Erreur lors de la modification de la distinction', 'error');
+            }
+        }
+
+        async function deleteAchievement(id) {
+            try {
+                const { error } = await supabase.from('achievements').delete().eq('id', id);
+                if (error) throw error;
+            } catch (error) {
+                console.error('Error deleting achievement:', error);
+                showSyncIndicator('Erreur lors de la suppression de la distinction', 'error');
+            }
+        }
+
+        async function loadVisionParagraphs() {
+            try {
+                const { data, error } = await supabase.from('vision_paragraphs').select('*').order('order');
+                if (error) throw error;
+                return data;
+            } catch (error) {
+                console.error('Error loading vision paragraphs:', error);
+                return defaultConfig.vision.paragraphs;
+            }
+        }
+
+        async function addVisionParagraph(text, order) {
+            try {
+                const { error } = await supabase.from('vision_paragraphs').insert({
+                    id: 'vis' + Date.now(),
+                    text,
+                    order
+                });
+                if (error) throw error;
+            } catch (error) {
+                console.error('Error adding vision paragraph:', error);
+                showSyncIndicator('Erreur lors de l\'ajout du paragraphe', 'error');
+            }
+        }
+
+        async function updateVisionParagraph(id, text) {
+            try {
+                const { error } = await supabase.from('vision_paragraphs')
+                    .update({ text })
+                    .eq('id', id);
+                if (error) throw error;
+            } catch (error) {
+                console.error('Error updating vision paragraph:', error);
+                showSyncIndicator('Erreur lors de la modification du paragraphe', 'error');
+            }
+        }
+
+        async function deleteVisionParagraph(id) {
+            try {
+                const { error } = await supabase.from('vision_paragraphs').delete().eq('id', id);
+                if (error) throw error;
+            } catch (error) {
+                console.error('Error deleting vision paragraph:', error);
+                showSyncIndicator('Erreur lors de la suppression du paragraphe', 'error');
+            }
+        }
+
+        async function loadButtons() {
+            try {
+                const { data, error } = await supabase.from('buttons').select('*').order('id');
+                if (error) throw error;
+                return data;
+            } catch (error) {
+                console.error('Error loading buttons:', error);
+                return defaultConfig.buttons;
+            }
+        }
+
+        async function addButtonItem(text, url, color, left, top) {
+            try {
+                const { error } = await supabase.from('buttons').insert({
+                    id: 'btn' + Date.now(),
+                    text,
+                    url,
+                    color,
+                    left,
+                    top
+                });
+                if (error) throw error;
+            } catch (error) {
+                console.error('Error adding button:', error);
+                showSyncIndicator('Erreur lors de l\'ajout du bouton', 'error');
+            }
+        }
+
+        async function updateButton(id, text, url, color, left, top) {
+            try {
+                const { error } = await supabase.from('buttons')
+                    .update({ text, url, color, left, top })
+                    .eq('id', id);
+                if (error) throw error;
+            } catch (error) {
+                console.error('Error updating button:', error);
+                showSyncIndicator('Erreur lors de la modification du bouton', 'error');
+            }
+        }
+
+        async function deleteButtonItem(id) {
+            try {
+                const { error } = await supabase.from('buttons').delete().eq('id', id);
+                if (error) throw error;
+            } catch (error) {
+                console.error('Error deleting button:', error);
+                showSyncIndicator('Erreur lors de la suppression du bouton', 'error');
+            }
+        }
+
+        async function uploadPhoto(file) {
+            try {
+                const fileName = `profile_${Date.now()}.${file.name.split('.').pop()}`;
+                const { error } = await supabase.storage.from('photos').upload(fileName, file);
+                if (error) throw error;
+                const { data } = supabase.storage.from('photos').getPublicUrl(fileName);
+                return data.publicUrl;
+            } catch (error) {
+                console.error('Error uploading photo:', error);
+                return null;
+            }
+        }
+
+        // Charger configuration depuis Supabase
+        async function loadConfig() {
+            try {
+                showSyncIndicator('Chargement de la configuration...');
+                const config = await loadSiteConfig();
+                if (config) {
+                    pageConfig.general = config.aladine_general || defaultConfig.general;
+                    pageConfig.styles = config.aladine_styles || defaultConfig.styles;
+                    pageConfig.navigation = config.navigation || defaultConfig.navigation;
+                    pageConfig.buttons = await loadButtons();
+                    pageConfig.bio = await loadBioParagraphs();
+                    pageConfig.achievements = {
+                        title: config.aladine_achievements?.title || defaultConfig.achievements.title,
+                        items: await loadAchievements()
+                    };
+                    pageConfig.vision = {
+                        title: config.aladine_vision?.title || defaultConfig.vision.title,
+                        paragraphs: await loadVisionParagraphs()
+                    };
+                } else {
+                    await saveSiteConfig('aladine_general', defaultConfig.general);
+                    await saveSiteConfig('aladine_styles', defaultConfig.styles);
+                    await saveSiteConfig('navigation', defaultConfig.navigation);
+                    await saveSiteConfig('aladine_achievements', { title: defaultConfig.achievements.title });
+                    await saveSiteConfig('aladine_vision', { title: defaultConfig.vision.title });
+                    pageConfig.buttons.forEach(async btn => await addButtonItem(btn.text, btn.url, btn.color, btn.left, btn.top));
+                    pageConfig.bio.forEach(async (p, i) => await addBioParagraph(p.text, i));
+                    pageConfig.achievements.items.forEach(async (a, i) => await addAchievement(a.year, a.desc, i));
+                    pageConfig.vision.paragraphs.forEach(async (p, i) => await addVisionParagraph(p.text, i));
+                    pageConfig.navigation.items.forEach(async (n, i) => await addNavItem(n.text, n.url, i));
+                }
+                applyConfig();
+                showSyncIndicator('Configuration chargée', 'success');
+            } catch (error) {
+                console.error('Error loading config:', error);
+                showSyncIndicator('Erreur lors du chargement', 'error');
+            }
+        }
+
+        // Afficher indicateur de synchronisation
+        function showSyncIndicator(message, type = 'syncing') {
+            const indicator = document.getElementById('syncIndicator');
+            const status = document.getElementById('syncStatus');
+            
+            status.textContent = message;
+            indicator.className = 'sync-indicator show';
+            
+            if (type === 'success') {
+                indicator.style.background = 'rgba(0, 255, 0, 0.2)';
+                indicator.style.color = '#00ff00';
+            } else if (type === 'error') {
+                indicator.style.background = 'rgba(255, 0, 0, 0.2)';
+                indicator.style.color = '#ff4444';
+            } else {
+                indicator.style.background = 'rgba(255, 255, 0, 0.2)';
+                indicator.style.color = '#ffff00';
+            }
+            
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 3000);
+        }
+
+        // Appliquer configuration
         function applyConfig() {
-            // General
+            // Général
             document.getElementById('logo-text').textContent = pageConfig.general.logoText;
             document.getElementById('page-title').textContent = pageConfig.general.pageTitle;
             document.getElementById('profile-image').src = pageConfig.general.profileImage;
             document.getElementById('profile-image').alt = pageConfig.general.profileImageAlt;
-            
+            document.getElementById('profile-image').style.left = pageConfig.general.profileImageLeft + 'px';
+            document.getElementById('profile-image').style.top = pageConfig.general.profileImageTop + 'px';
+            document.getElementById('profile-image').style.position = 'relative';
+
             // Bio
             const bioContent = document.getElementById('bio-content');
             bioContent.innerHTML = '';
             pageConfig.bio.forEach(paragraph => {
                 const p = document.createElement('p');
-                p.textContent = paragraph;
+                p.textContent = paragraph.text;
                 bioContent.appendChild(p);
             });
-            
+
             // Achievements
             document.getElementById('achievements-title').textContent = pageConfig.achievements.title;
             const achievementsList = document.getElementById('achievements-list');
@@ -953,60 +1459,79 @@
                 `;
                 achievementsList.appendChild(div);
             });
-            
+
             // Vision
             document.getElementById('vision-title').textContent = pageConfig.vision.title;
             const visionContent = document.getElementById('vision-content');
             visionContent.innerHTML = '';
             pageConfig.vision.paragraphs.forEach(paragraph => {
                 const p = document.createElement('p');
-                p.textContent = paragraph;
+                p.textContent = paragraph.text;
                 visionContent.appendChild(p);
             });
-            
+
             // Navigation
             const nav = document.getElementById('navigation');
             nav.innerHTML = '';
-            pageConfig.navigation.forEach(item => {
+            pageConfig.navigation.items.forEach(item => {
                 const link = document.createElement('a');
                 link.href = item.url;
                 link.textContent = item.text;
+                link.style.fontFamily = pageConfig.navigation.font;
+                link.style.fontSize = pageConfig.navigation.size + 'rem';
+                link.style.color = pageConfig.navigation.color;
                 if (item.active) link.className = 'active';
                 nav.appendChild(link);
             });
-            
+
+            // Boutons
+            const buttonsContainer = document.getElementById('custom-buttons');
+            buttonsContainer.innerHTML = '';
+            pageConfig.buttons.forEach(btn => {
+                const button = document.createElement('button');
+                button.className = 'custom-button';
+                button.id = btn.id;
+                button.textContent = btn.text;
+                button.style.backgroundColor = btn.color;
+                button.style.left = btn.left + 'px';
+                button.style.top = btn.top + 'px';
+                if (btn.url) {
+                    button.onclick = () => window.location.href = btn.url;
+                }
+                buttonsContainer.appendChild(button);
+            });
+
             // Styles
             applyStyles();
         }
 
-        // Apply styles
+        // Appliquer styles
         function applyStyles() {
             const style = pageConfig.styles;
             document.body.style.fontFamily = `'${style.mainFont}', sans-serif`;
             document.body.style.color = style.textColor;
             document.body.style.backgroundColor = style.bgColor;
-            
-            // Update all h1
+            document.getElementById('logo-text').style.fontFamily = style.logoFont;
+            document.getElementById('logo-text').style.fontSize = style.logoSize + 'rem';
+            document.getElementById('page-title').style.fontFamily = style.titleFont;
+
             document.querySelectorAll('h1').forEach(h1 => {
                 h1.style.fontSize = style.titleSize + 'rem';
             });
-            
-            // Update all h2
+
             document.querySelectorAll('h2').forEach(h2 => {
                 h2.style.fontSize = style.subtitleSize + 'rem';
                 h2.style.color = style.accentColor;
             });
-            
-            // Update achievement years
+
             document.querySelectorAll('.achievement-year').forEach(year => {
                 year.style.color = style.accentColor;
             });
-            
-            // Update navigation hover
+
             updateNavigationStyles();
         }
 
-        // Update navigation hover styles
+        // Mettre à jour styles navigation
         function updateNavigationStyles() {
             let styleEl = document.getElementById('dynamicStyles');
             if (!styleEl) {
@@ -1017,39 +1542,63 @@
             
             styleEl.innerHTML = `
                 .navigation a:hover {
-                    color: ${pageConfig.styles.accentColor} !important;
+                    color: ${pageConfig.navigation.hoverColor} !important;
                 }
                 .navigation a::after {
-                    background-color: ${pageConfig.styles.accentColor} !important;
+                    background-color: ${pageConfig.navigation.hoverColor} !important;
                 }
                 .navigation a.active {
-                    color: ${pageConfig.styles.accentColor} !important;
+                    color: ${pageConfig.navigation.hoverColor} !important;
                 }
             `;
         }
 
-        // Admin access with triple click
+        // Séquence d'accès admin
         let clickCount = 0;
-        let clickTimer;
+let clickTimer;
 
-        document.getElementById('logo-text').addEventListener('click', function(e) {
-            e.preventDefault();
-            clickCount++;
-            
-            if (clickCount === 1) {
-                clickTimer = setTimeout(() => {
-                    clickCount = 0;
-                }, 500);
-            }
-            
-            if (clickCount === 3) {
-                clearTimeout(clickTimer);
-                clickCount = 0;
-                openPasswordModal();
-            }
-        });
+document.getElementById('main-title').addEventListener('click', function(e) {
+    e.preventDefault();
+    clickCount++;
+    
+    if (clickCount === 1) {
+        clickTimer = setTimeout(() => {
+            clickCount = 0;
+        }, 1000); // Reset après 1 seconde
+    }
+    
+    if (clickCount === 3) {
+        clearTimeout(clickTimer);
+        clickCount = 0;
+        openPasswordModal();
+    }
+});
+            // Gestion upload image profil
+            document.getElementById('profileImageFile').addEventListener('change', async function(e) {
+                const file = e.target.files[0];
+                if (file && (file.type === 'image/png' || file.type === 'image/jpeg')) {
+                    showSyncIndicator('Upload en cours...');
+                    const url = await uploadPhoto(file);
+                    if (url) {
+                        document.getElementById('profileImageUrl').value = url;
+                        showSyncIndicator('Image uploadée', 'success');
+                    } else {
+                        showSyncIndicator('Erreur lors de l\'upload', 'error');
+                    }
+                } else {
+                    showSyncIndicator('Veuillez sélectionner un fichier PNG ou JPG', 'error');
+                }
+            });
 
-        // Modal functions
+            // Gestion touche Enter pour mot de passe
+            document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
+            });
+        
+
+        // Fonctions modales
         function openPasswordModal() {
             document.getElementById('passwordModal').classList.add('show');
             document.getElementById('passwordInput').focus();
@@ -1061,15 +1610,15 @@
         }
 
         function checkPassword() {
-            const password = document.getElementById('passwordInput').value;
-            if (password === 'aladine123') {
-                closePasswordModal();
-                openAdminPanel();
-            } else {
-                alert('Mot de passe incorrect');
-                document.getElementById('passwordInput').value = '';
-            }
-        }
+    const password = document.getElementById('passwordInput').value;
+    if (password === 'aladine123') {  // Simple pour tester
+        closePasswordModal();
+        openAdminPanel();
+    } else {
+        alert('Mot de passe incorrect');
+        document.getElementById('passwordInput').value = '';
+    }
+}
 
         function openAdminPanel() {
             document.getElementById('adminModal').classList.add('show');
@@ -1078,95 +1627,113 @@
             updateAchievementsList();
             updateVisionList();
             updateNavList();
+            updateButtonList();
         }
 
         function closeAdminPanel() {
             document.getElementById('adminModal').classList.remove('show');
         }
 
-        // Tab switching
+        // Changement onglets
         function switchTab(tabName) {
-            document.querySelectorAll('.admin-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            
+            document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             event.target.classList.add('active');
             document.getElementById(tabName + '-tab').classList.add('active');
         }
 
-        // Load admin values
+        // Charger valeurs admin
         function loadAdminValues() {
             document.getElementById('logoText').value = pageConfig.general.logoText;
             document.getElementById('pageTitle').value = pageConfig.general.pageTitle;
             document.getElementById('profileImageUrl').value = pageConfig.general.profileImage;
             document.getElementById('profileImageAlt').value = pageConfig.general.profileImageAlt;
-            
+            document.getElementById('profileImageLeft').value = pageConfig.general.profileImageLeft;
+            document.getElementById('profileImageTop').value = pageConfig.general.profileImageTop;
             document.getElementById('achievementsTitle').value = pageConfig.achievements.title;
             document.getElementById('visionTitle').value = pageConfig.vision.title;
-            
             document.getElementById('mainFont').value = pageConfig.styles.mainFont;
+            document.getElementById('logoFont').value = pageConfig.styles.logoFont;
+            document.getElementById('titleFont').value = pageConfig.styles.titleFont;
             document.getElementById('textColor').value = pageConfig.styles.textColor;
             document.getElementById('accentColor').value = pageConfig.styles.accentColor;
             document.getElementById('bgColor').value = pageConfig.styles.bgColor;
             document.getElementById('titleSize').value = pageConfig.styles.titleSize;
             document.getElementById('subtitleSize').value = pageConfig.styles.subtitleSize;
-            
+            document.getElementById('logoSize').value = pageConfig.styles.logoSize;
+            document.getElementById('navFont').value = pageConfig.navigation.font;
+            document.getElementById('navSize').value = pageConfig.navigation.size;
+            document.getElementById('navColor').value = pageConfig.navigation.color;
+            document.getElementById('navHoverColor').value = pageConfig.navigation.hoverColor;
             updateColorPreviews();
         }
 
-        // General functions
-        function saveGeneral() {
-            pageConfig.general = {
-                logoText: document.getElementById('logoText').value,
-                pageTitle: document.getElementById('pageTitle').value,
-                profileImage: document.getElementById('profileImageUrl').value || pageConfig.general.profileImage,
-                profileImageAlt: document.getElementById('profileImageAlt').value
-            };
-            saveConfig();
-            applyConfig();
-            alert('Configuration générale sauvegardée !');
-        }
-
-        // Bio functions
-        function addBioParagraph() {
-            const text = document.getElementById('newBioParagraph').value;
-            if (text) {
-                pageConfig.bio.push(text);
-                saveConfig();
+        // Général
+        async function saveGeneral() {
+            try {
+                showSyncIndicator('Sauvegarde en cours...');
+                pageConfig.general = {
+                    logoText: document.getElementById('logoText').value,
+                    pageTitle: document.getElementById('pageTitle').value,
+                    profileImage: document.getElementById('profileImageUrl').value || pageConfig.general.profileImage,
+                    profileImageAlt: document.getElementById('profileImageAlt').value,
+                    profileImageLeft: parseInt(document.getElementById('profileImageLeft').value) || 0,
+                    profileImageTop: parseInt(document.getElementById('profileImageTop').value) || 0
+                };
+                await saveSiteConfig('aladine_general', pageConfig.general);
                 applyConfig();
-                updateBioList();
-                document.getElementById('newBioParagraph').value = '';
-                alert('Paragraphe ajouté !');
+                showSyncIndicator('Configuration générale sauvegardée', 'success');
+            } catch (error) {
+                console.error('Error saving general:', error);
+                showSyncIndicator('Erreur lors de la sauvegarde', 'error');
             }
         }
 
-        function updateBioList() {
+        // Bio
+        async function addBioParagraph() {
+            const text = document.getElementById('newBioParagraph').value;
+            if (text) {
+                try {
+                    showSyncIndicator('Ajout du paragraphe...');
+                    await addBioParagraph(text, pageConfig.bio.length);
+                    pageConfig.bio = await loadBioParagraphs();
+                    applyConfig();
+                    updateBioList();
+                    document.getElementById('newBioParagraph').value = '';
+                    showSyncIndicator('Paragraphe ajouté', 'success');
+                } catch (error) {
+                    showSyncIndicator('Erreur lors de l\'ajout', 'error');
+                }
+            } else {
+                showSyncIndicator('Veuillez entrer un texte', 'error');
+            }
+        }
+
+        async function updateBioList() {
             const list = document.getElementById('bioList');
             list.innerHTML = '<h4>Paragraphes actuels</h4>';
-            
-            pageConfig.bio.forEach((paragraph, index) => {
+            const paragraphs = await loadBioParagraphs();
+            pageConfig.bio = paragraphs;
+            paragraphs.forEach((paragraph, index) => {
                 const item = document.createElement('div');
                 item.className = 'list-item';
-                item.id = `bio-item-${index}`;
+                item.id = `bio-item-${paragraph.id}`;
                 item.innerHTML = `
                     <div class="list-item-view">
                         <div class="list-item-info">
-                            <small>${paragraph.substring(0, 100)}...</small>
+                            <small>${paragraph.text.substring(0, 100)}...</small>
                         </div>
                         <div class="list-item-actions">
-                            <button class="btn-edit btn-small" onclick="editBio(${index})">Modifier</button>
-                            <button class="btn-danger btn-small" onclick="deleteBio(${index})">Supprimer</button>
+                            <button class="btn-edit btn-small" onclick="editBio('${paragraph.id}')">Modifier</button>
+                            <button class="btn-danger btn-small" onclick="deleteBio('${paragraph.id}')">Supprimer</button>
                         </div>
                     </div>
                     <div class="list-item-edit">
                         <div class="edit-form">
-                            <textarea id="edit-bio-${index}">${paragraph}</textarea>
+                            <textarea id="edit-bio-${paragraph.id}">${paragraph.text}</textarea>
                             <div class="edit-actions">
-                                <button class="btn-primary btn-small" onclick="saveBioEdit(${index})">Sauvegarder</button>
-                                <button class="btn-danger btn-small" onclick="cancelBioEdit(${index})">Annuler</button>
+                                <button class="btn-primary btn-small" onclick="saveBioEdit('${paragraph.id}')">Sauvegarder</button>
+                                <button class="btn-danger btn-small" onclick="cancelBioEdit('${paragraph.id}')">Annuler</button>
                             </div>
                         </div>
                     </div>
@@ -1175,82 +1742,107 @@
             });
         }
 
-        function editBio(index) {
-            document.getElementById(`bio-item-${index}`).classList.add('editing');
+        function editBio(id) {
+            document.getElementById(`bio-item-${id}`).classList.add('editing');
         }
 
-        function cancelBioEdit(index) {
-            document.getElementById(`bio-item-${index}`).classList.remove('editing');
+        function cancelBioEdit(id) {
+            document.getElementById(`bio-item-${id}`).classList.remove('editing');
         }
 
-        function saveBioEdit(index) {
-            const text = document.getElementById(`edit-bio-${index}`).value;
+        async function saveBioEdit(id) {
+            const text = document.getElementById(`edit-bio-${id}`).value;
             if (text) {
-                pageConfig.bio[index] = text;
-                saveConfig();
-                applyConfig();
-                updateBioList();
-                alert('Paragraphe modifié !');
+                try {
+                    showSyncIndicator('Modification en cours...');
+                    await updateBioParagraph(id, text);
+                    pageConfig.bio = await loadBioParagraphs();
+                    applyConfig();
+                    updateBioList();
+                    showSyncIndicator('Paragraphe modifié', 'success');
+                } catch (error) {
+                    showSyncIndicator('Erreur lors de la modification', 'error');
+                }
+            } else {
+                showSyncIndicator('Veuillez entrer un texte', 'error');
             }
         }
 
-        function deleteBio(index) {
+        async function deleteBio(id) {
             if (confirm('Supprimer ce paragraphe ?')) {
-                pageConfig.bio.splice(index, 1);
-                saveConfig();
-                applyConfig();
-                updateBioList();
+                try {
+                    showSyncIndicator('Suppression en cours...');
+                    await deleteBioParagraph(id);
+                    pageConfig.bio = await loadBioParagraphs();
+                    applyConfig();
+                    updateBioList();
+                    showSyncIndicator('Paragraphe supprimé', 'success');
+                } catch (error) {
+                    showSyncIndicator('Erreur lors de la suppression', 'error');
+                }
             }
         }
 
-        // Achievements functions
-        function saveAchievementsTitle() {
-            pageConfig.achievements.title = document.getElementById('achievementsTitle').value;
-            saveConfig();
-            applyConfig();
-            alert('Titre sauvegardé !');
+        // Achievements
+        async function saveAchievementsTitle() {
+            try {
+                showSyncIndicator('Sauvegarde du titre...');
+                pageConfig.achievements.title = document.getElementById('achievementsTitle').value;
+                await saveSiteConfig('aladine_achievements', { title: pageConfig.achievements.title });
+                applyConfig();
+                showSyncIndicator('Titre sauvegardé', 'success');
+            } catch (error) {
+                showSyncIndicator('Erreur lors de la sauvegarde', 'error');
+            }
         }
 
-        function addAchievement() {
+        async function addAchievement() {
             const year = document.getElementById('achievementYear').value;
             const desc = document.getElementById('achievementDesc').value;
-            
             if (year && desc) {
-                pageConfig.achievements.items.push({ year, desc });
-                saveConfig();
-                applyConfig();
-                updateAchievementsList();
-                document.getElementById('achievementYear').value = '';
-                document.getElementById('achievementDesc').value = '';
-                alert('Distinction ajoutée !');
+                try {
+                    showSyncIndicator('Ajout de la distinction...');
+                    await addAchievement(year, desc, pageConfig.achievements.items.length);
+                    pageConfig.achievements.items = await loadAchievements();
+                    applyConfig();
+                    updateAchievementsList();
+                    document.getElementById('achievementYear').value = '';
+                    document.getElementById('achievementDesc').value = '';
+                    showSyncIndicator('Distinction ajoutée', 'success');
+                } catch (error) {
+                    showSyncIndicator('Erreur lors de l\'ajout', 'error');
+                }
+            } else {
+                showSyncIndicator('Veuillez remplir tous les champs', 'error');
             }
         }
 
-        function updateAchievementsList() {
+        async function updateAchievementsList() {
             const list = document.getElementById('achievementsList');
             list.innerHTML = '<h4>Distinctions actuelles</h4>';
-            
-            pageConfig.achievements.items.forEach((item, index) => {
+            const items = await loadAchievements();
+            pageConfig.achievements.items = items;
+            items.forEach((item, index) => {
                 const div = document.createElement('div');
                 div.className = 'list-item';
-                div.id = `achievement-item-${index}`;
+                div.id = `achievement-item-${item.id}`;
                 div.innerHTML = `
                     <div class="list-item-view">
                         <div class="list-item-info">
                             <strong>${item.year}</strong> - ${item.desc}
                         </div>
                         <div class="list-item-actions">
-                            <button class="btn-edit btn-small" onclick="editAchievement(${index})">Modifier</button>
-                            <button class="btn-danger btn-small" onclick="deleteAchievement(${index})">Supprimer</button>
+                            <button class="btn-edit btn-small" onclick="editAchievement('${item.id}')">Modifier</button>
+                            <button class="btn-danger btn-small" onclick="deleteAchievement('${item.id}')">Supprimer</button>
                         </div>
                     </div>
                     <div class="list-item-edit">
                         <div class="edit-form">
-                            <input type="text" id="edit-achievement-year-${index}" value="${item.year}" placeholder="Année">
-                            <input type="text" id="edit-achievement-desc-${index}" value="${item.desc}" placeholder="Description">
+                            <input type="text" id="edit-achievement-year-${item.id}" value="${item.year}" placeholder="Année">
+                            <input type="text" id="edit-achievement-desc-${item.id}" value="${item.desc}" placeholder="Description">
                             <div class="edit-actions">
-                                <button class="btn-primary btn-small" onclick="saveAchievementEdit(${index})">Sauvegarder</button>
-                                <button class="btn-danger btn-small" onclick="cancelAchievementEdit(${index})">Annuler</button>
+                                <button class="btn-primary btn-small" onclick="saveAchievementEdit('${item.id}')">Sauvegarder</button>
+                                <button class="btn-danger btn-small" onclick="cancelAchievementEdit('${item.id}')">Annuler</button>
                             </div>
                         </div>
                     </div>
@@ -1259,80 +1851,106 @@
             });
         }
 
-        function editAchievement(index) {
-            document.getElementById(`achievement-item-${index}`).classList.add('editing');
+        function editAchievement(id) {
+            document.getElementById(`achievement-item-${id}`).classList.add('editing');
         }
 
-        function cancelAchievementEdit(index) {
-            document.getElementById(`achievement-item-${index}`).classList.remove('editing');
+        function cancelAchievementEdit(id) {
+            document.getElementById(`achievement-item-${id}`).classList.remove('editing');
         }
 
-        function saveAchievementEdit(index) {
-            const year = document.getElementById(`edit-achievement-year-${index}`).value;
-            const desc = document.getElementById(`edit-achievement-desc-${index}`).value;
-            
+        async function saveAchievementEdit(id) {
+            const year = document.getElementById(`edit-achievement-year-${id}`).value;
+            const desc = document.getElementById(`edit-achievement-desc-${id}`).value;
             if (year && desc) {
-                pageConfig.achievements.items[index] = { year, desc };
-                saveConfig();
-                applyConfig();
-                updateAchievementsList();
-                alert('Distinction modifiée !');
+                try {
+                    showSyncIndicator('Modification en cours...');
+                    await updateAchievement(id, year, desc);
+                    pageConfig.achievements.items = await loadAchievements();
+                    applyConfig();
+                    updateAchievementsList();
+                    showSyncIndicator('Distinction modifiée', 'success');
+                } catch (error) {
+                    showSyncIndicator('Erreur lors de la modification', 'error');
+                }
+            } else {
+                showSyncIndicator('Veuillez remplir tous les champs', 'error');
             }
         }
 
-        function deleteAchievement(index) {
+        async function deleteAchievement(id) {
             if (confirm('Supprimer cette distinction ?')) {
-                pageConfig.achievements.items.splice(index, 1);
-                saveConfig();
-                applyConfig();
-                updateAchievementsList();
+                try {
+                    showSyncIndicator('Suppression en cours...');
+                    await deleteAchievement(id);
+                    pageConfig.achievements.items = await loadAchievements();
+                    applyConfig();
+                    updateAchievementsList();
+                    showSyncIndicator('Distinction supprimée', 'success');
+                } catch (error) {
+                    showSyncIndicator('Erreur lors de la suppression', 'error');
+                }
             }
         }
 
-        // Vision functions
-        function saveVisionTitle() {
-            pageConfig.vision.title = document.getElementById('visionTitle').value;
-            saveConfig();
-            applyConfig();
-            alert('Titre sauvegardé !');
+        // Vision
+        async function saveVisionTitle() {
+            try {
+                showSyncIndicator('Sauvegarde du titre...');
+                pageConfig.vision.title = document.getElementById('visionTitle').value;
+                await saveSiteConfig('aladine_vision', { title: pageConfig.vision.title });
+                applyConfig();
+                showSyncIndicator('Titre sauvegardé', 'success');
+            } catch (error) {
+                showSyncIndicator('Erreur lors de la sauvegarde', 'error');
+            }
         }
 
-        function addVisionParagraph() {
+        async function addVisionParagraph() {
             const text = document.getElementById('newVisionParagraph').value;
             if (text) {
-                pageConfig.vision.paragraphs.push(text);
-                saveConfig();
-                applyConfig();
-                updateVisionList();
-                document.getElementById('newVisionParagraph').value = '';
-                alert('Paragraphe ajouté !');
+                try {
+                    showSyncIndicator('Ajout du paragraphe...');
+                    await addVisionParagraph(text, pageConfig.vision.paragraphs.length);
+                    pageConfig.vision.paragraphs = await loadVisionParagraphs();
+                    applyConfig();
+                    updateVisionList();
+                    document.getElementById('newVisionParagraph').value = '';
+                    showSyncIndicator('Paragraphe ajouté', 'success');
+                } catch (error) {
+                    showSyncIndicator('Erreur lors de l\'ajout', 'error');
+                }
+            } else {
+                showSyncIndicator('Veuillez entrer un texte', 'error');
             }
         }
 
-        function updateVisionList() {
+       
+        async function updateVisionList() {
             const list = document.getElementById('visionList');
             list.innerHTML = '<h4>Paragraphes actuels</h4>';
-            
-            pageConfig.vision.paragraphs.forEach((paragraph, index) => {
+            const paragraphs = await loadVisionParagraphs();
+            pageConfig.vision.paragraphs = paragraphs;
+            paragraphs.forEach((paragraph, index) => {
                 const item = document.createElement('div');
                 item.className = 'list-item';
-                item.id = `vision-item-${index}`;
+                item.id = `vision-item-${paragraph.id}`;
                 item.innerHTML = `
                     <div class="list-item-view">
                         <div class="list-item-info">
-                            <small>${paragraph.substring(0, 100)}...</small>
+                            <small>${paragraph.text.substring(0, 100)}...</small>
                         </div>
                         <div class="list-item-actions">
-                            <button class="btn-edit btn-small" onclick="editVision(${index})">Modifier</button>
-                            <button class="btn-danger btn-small" onclick="deleteVision(${index})">Supprimer</button>
+                            <button class="btn-edit btn-small" onclick="editVision('${paragraph.id}')">Modifier</button>
+                            <button class="btn-danger btn-small" onclick="deleteVision('${paragraph.id}')">Supprimer</button>
                         </div>
                     </div>
                     <div class="list-item-edit">
                         <div class="edit-form">
-                            <textarea id="edit-vision-${index}">${paragraph}</textarea>
+                            <textarea id="edit-vision-${paragraph.id}">${paragraph.text}</textarea>
                             <div class="edit-actions">
-                                <button class="btn-primary btn-small" onclick="saveVisionEdit(${index})">Sauvegarder</button>
-                                <button class="btn-danger btn-small" onclick="cancelVisionEdit(${index})">Annuler</button>
+                                <button class="btn-primary btn-small" onclick="saveVisionEdit('${paragraph.id}')">Sauvegarder</button>
+                                <button class="btn-danger btn-small" onclick="cancelVisionEdit('${paragraph.id}')">Annuler</button>
                             </div>
                         </div>
                     </div>
@@ -1341,76 +1959,110 @@
             });
         }
 
-        function editVision(index) {
-            document.getElementById(`vision-item-${index}`).classList.add('editing');
+        function editVision(id) {
+            document.getElementById(`vision-item-${id}`).classList.add('editing');
         }
 
-        function cancelVisionEdit(index) {
-            document.getElementById(`vision-item-${index}`).classList.remove('editing');
+        function cancelVisionEdit(id) {
+            document.getElementById(`vision-item-${id}`).classList.remove('editing');
         }
 
-        function saveVisionEdit(index) {
-            const text = document.getElementById(`edit-vision-${index}`).value;
+        async function saveVisionEdit(id) {
+            const text = document.getElementById(`edit-vision-${id}`).value;
             if (text) {
-                pageConfig.vision.paragraphs[index] = text;
-                saveConfig();
-                applyConfig();
-                updateVisionList();
-                alert('Paragraphe modifié !');
+                try {
+                    showSyncIndicator('Modification en cours...');
+                    await updateVisionParagraph(id, text);
+                    pageConfig.vision.paragraphs = await loadVisionParagraphs();
+                    applyConfig();
+                    updateVisionList();
+                    showSyncIndicator('Paragraphe modifié', 'success');
+                } catch (error) {
+                    showSyncIndicator('Erreur lors de la modification', 'error');
+                }
+            } else {
+                showSyncIndicator('Veuillez entrer un texte', 'error');
             }
         }
 
-        function deleteVision(index) {
+        async function deleteVision(id) {
             if (confirm('Supprimer ce paragraphe ?')) {
-                pageConfig.vision.paragraphs.splice(index, 1);
-                saveConfig();
-                applyConfig();
-                updateVisionList();
+                try {
+                    showSyncIndicator('Suppression en cours...');
+                    await deleteVisionParagraph(id);
+                    pageConfig.vision.paragraphs = await loadVisionParagraphs();
+                    applyConfig();
+                    updateVisionList();
+                    showSyncIndicator('Paragraphe supprimé', 'success');
+                } catch (error) {
+                    showSyncIndicator('Erreur lors de la suppression', 'error');
+                }
             }
         }
 
-        // Navigation functions
-        function addNavItem() {
+        // Navigation
+        async function addNavItem() {
             const text = document.getElementById('navText').value;
             const url = document.getElementById('navUrl').value;
-            
             if (text && url) {
-                pageConfig.navigation.push({ text, url, active: false });
-                saveConfig();
-                applyConfig();
-                updateNavList();
-                document.getElementById('navText').value = '';
-                document.getElementById('navUrl').value = '';
-                alert('Lien ajouté !');
+                try {
+                    showSyncIndicator('Ajout du lien...');
+                    await addNavItem(text, url, pageConfig.navigation.items.length);
+                    pageConfig.navigation.items = await loadNavigationItems();
+                    applyConfig();
+                    updateNavList();
+                    document.getElementById('navText').value = '';
+                    document.getElementById('navUrl').value = '';
+                    showSyncIndicator('Lien ajouté', 'success');
+                } catch (error) {
+                    showSyncIndicator('Erreur lors de l\'ajout', 'error');
+                }
+            } else {
+                showSyncIndicator('Veuillez remplir tous les champs', 'error');
             }
         }
 
-        function updateNavList() {
+        async function saveNavStyle() {
+            try {
+                showSyncIndicator('Sauvegarde du style...');
+                pageConfig.navigation.font = document.getElementById('navFont').value;
+                pageConfig.navigation.size = parseFloat(document.getElementById('navSize').value);
+                pageConfig.navigation.color = document.getElementById('navColor').value;
+                pageConfig.navigation.hoverColor = document.getElementById('navHoverColor').value;
+                await saveSiteConfig('navigation', pageConfig.navigation);
+                applyConfig();
+                showSyncIndicator('Style de navigation sauvegardé', 'success');
+            } catch (error) {
+                showSyncIndicator('Erreur lors de la sauvegarde', 'error');
+            }
+        }
+
+        async function updateNavList() {
             const list = document.getElementById('navList');
             list.innerHTML = '<h4>Liens actuels</h4>';
-            
-            pageConfig.navigation.forEach((item, index) => {
+            const items = await loadNavigationItems();
+            pageConfig.navigation.items = items;
+            items.forEach((item, index) => {
                 const div = document.createElement('div');
                 div.className = 'list-item';
-                div.id = `nav-item-${index}`;
+                div.id = `nav-item-${item.id}`;
                 div.innerHTML = `
                     <div class="list-item-view">
                         <div class="list-item-info">
                             <strong>${item.text}</strong> - ${item.url}
-                            ${item.active ? '<span style="color: #d4af37;"> (Actif)</span>' : ''}
                         </div>
                         <div class="list-item-actions">
-                            <button class="btn-edit btn-small" onclick="editNavItem(${index})">Modifier</button>
-                            <button class="btn-danger btn-small" onclick="deleteNavItem(${index})">Supprimer</button>
+                            <button class="btn-edit btn-small" onclick="editNav('${item.id}')">Modifier</button>
+                            <button class="btn-danger btn-small" onclick="deleteNav('${item.id}')">Supprimer</button>
                         </div>
                     </div>
                     <div class="list-item-edit">
                         <div class="edit-form">
-                            <input type="text" id="edit-nav-text-${index}" value="${item.text}" placeholder="Texte">
-                            <input type="text" id="edit-nav-url-${index}" value="${item.url}" placeholder="URL">
+                            <input type="text" id="edit-nav-text-${item.id}" value="${item.text}" placeholder="Texte du lien">
+                            <input type="text" id="edit-nav-url-${item.id}" value="${item.url}" placeholder="URL">
                             <div class="edit-actions">
-                                <button class="btn-primary btn-small" onclick="saveNavEdit(${index})">Sauvegarder</button>
-                                <button class="btn-danger btn-small" onclick="cancelNavEdit(${index})">Annuler</button>
+                                <button class="btn-primary btn-small" onclick="saveNavEdit('${item.id}')">Sauvegarder</button>
+                                <button class="btn-danger btn-small" onclick="cancelNavEdit('${item.id}')">Annuler</button>
                             </div>
                         </div>
                     </div>
@@ -1419,97 +2071,270 @@
             });
         }
 
-        function editNavItem(index) {
-            document.getElementById(`nav-item-${index}`).classList.add('editing');
+        function editNav(id) {
+            document.getElementById(`nav-item-${id}`).classList.add('editing');
         }
 
-        function cancelNavEdit(index) {
-            document.getElementById(`nav-item-${index}`).classList.remove('editing');
+        function cancelNavEdit(id) {
+            document.getElementById(`nav-item-${id}`).classList.remove('editing');
         }
 
-        function saveNavEdit(index) {
-            const text = document.getElementById(`edit-nav-text-${index}`).value;
-            const url = document.getElementById(`edit-nav-url-${index}`).value;
-            
+        async function saveNavEdit(id) {
+            const text = document.getElementById(`edit-nav-text-${id}`).value;
+            const url = document.getElementById(`edit-nav-url-${id}`).value;
             if (text && url) {
-                pageConfig.navigation[index].text = text;
-                pageConfig.navigation[index].url = url;
-                saveConfig();
-                applyConfig();
-                updateNavList();
-                alert('Lien modifié !');
+                try {
+                    showSyncIndicator('Modification en cours...');
+                    await updateNavItem(id, text, url);
+                    pageConfig.navigation.items = await loadNavigationItems();
+                    applyConfig();
+                    updateNavList();
+                    showSyncIndicator('Lien modifié', 'success');
+                } catch (error) {
+                    showSyncIndicator('Erreur lors de la modification', 'error');
+                }
+            } else {
+                showSyncIndicator('Veuillez remplir tous les champs', 'error');
             }
         }
 
-        function deleteNavItem(index) {
+        async function deleteNav(id) {
             if (confirm('Supprimer ce lien ?')) {
-                pageConfig.navigation.splice(index, 1);
-                saveConfig();
-                applyConfig();
-                updateNavList();
+                try {
+                    showSyncIndicator('Suppression en cours...');
+                    await deleteNavItem(id);
+                    pageConfig.navigation.items = await loadNavigationItems();
+                    applyConfig();
+                    updateNavList();
+                    showSyncIndicator('Lien supprimé', 'success');
+                } catch (error) {
+                    showSyncIndicator('Erreur lors de la suppression', 'error');
+                }
             }
         }
 
-        // Styles functions
-        function saveStyles() {
-            pageConfig.styles = {
-                mainFont: document.getElementById('mainFont').value,
-                textColor: document.getElementById('textColor').value,
-                accentColor: document.getElementById('accentColor').value,
-                bgColor: document.getElementById('bgColor').value,
-                titleSize: parseFloat(document.getElementById('titleSize').value),
-                subtitleSize: parseFloat(document.getElementById('subtitleSize').value)
-            };
-            saveConfig();
-            applyConfig();
-            alert('Styles sauvegardés !');
+        // Styles
+        async function saveStyles() {
+            try {
+                showSyncIndicator('Sauvegarde des styles...');
+                pageConfig.styles = {
+                    mainFont: document.getElementById('mainFont').value,
+                    logoFont: document.getElementById('logoFont').value,
+                    titleFont: document.getElementById('titleFont').value,
+                    textColor: document.getElementById('textColor').value,
+                    accentColor: document.getElementById('accentColor').value,
+                    bgColor: document.getElementById('bgColor').value,
+                    titleSize: parseFloat(document.getElementById('titleSize').value),
+                    subtitleSize: parseFloat(document.getElementById('subtitleSize').value),
+                    logoSize: parseFloat(document.getElementById('logoSize').value)
+                };
+                await saveSiteConfig('aladine_styles', pageConfig.styles);
+                applyStyles();
+                showSyncIndicator('Styles sauvegardés', 'success');
+            } catch (error) {
+                showSyncIndicator('Erreur lors de la sauvegarde', 'error');
+            }
         }
 
-        function resetStyles() {
-            pageConfig.styles = {
-                mainFont: 'Arial',
-                textColor: '#ffffff',
-                accentColor: '#d4af37',
-                bgColor: '#000000',
-                titleSize: 2.5,
-                subtitleSize: 1.8
-            };
-            saveConfig();
-            applyConfig();
-            loadAdminValues();
-            alert('Styles réinitialisés !');
+        async function resetStyles() {
+            if (confirm('Réinitialiser les styles par défaut ?')) {
+                try {
+                    showSyncIndicator('Réinitialisation des styles...');
+                    pageConfig.styles = JSON.parse(JSON.stringify(defaultConfig.styles));
+                    await saveSiteConfig('aladine_styles', pageConfig.styles);
+                    applyStyles();
+                    loadAdminValues();
+                    showSyncIndicator('Styles réinitialisés', 'success');
+                } catch (error) {
+                    showSyncIndicator('Erreur lors de la réinitialisation', 'error');
+                }
+            }
         }
 
-        // Color preview updates
+        // Boutons
+        async function addButton() {
+            const text = document.getElementById('buttonText').value;
+            const url = document.getElementById('buttonUrl').value;
+            const color = document.getElementById('buttonColor').value;
+            const left = parseInt(document.getElementById('buttonLeft').value) || 100;
+            const top = parseInt(document.getElementById('buttonTop').value) || 100;
+            if (text) {
+                try {
+                    showSyncIndicator('Ajout du bouton...');
+                    await addButtonItem(text, url, color, left, top);
+                    pageConfig.buttons = await loadButtons();
+                    applyConfig();
+                    updateButtonList();
+                    document.getElementById('buttonText').value = '';
+                    document.getElementById('buttonUrl').value = '';
+                    document.getElementById('buttonColor').value = '#d4af37';
+                    document.getElementById('buttonLeft').value = '100';
+                    document.getElementById('buttonTop').value = '100';
+                    showSyncIndicator('Bouton ajouté', 'success');
+                } catch (error) {
+                    showSyncIndicator('Erreur lors de l\'ajout', 'error');
+                }
+            } else {
+                showSyncIndicator('Veuillez entrer un texte pour le bouton', 'error');
+            }
+        }
+
+        async function updateButtonList() {
+            const list = document.getElementById('buttonList');
+            list.innerHTML = '<h4>Boutons actuels</h4>';
+            const buttons = await loadButtons();
+            pageConfig.buttons = buttons;
+            buttons.forEach((button, index) => {
+                const div = document.createElement('div');
+                div.className = 'list-item';
+                div.id = `button-item-${button.id}`;
+                div.innerHTML = `
+                    <div class="list-item-view">
+                        <div class="list-item-info">
+                            <strong>${button.text}</strong> - ${button.url || 'Aucune URL'} 
+                            <span style="background: ${button.color}; padding: 2px 8px; border-radius: 3px; margin-left: 10px;">${button.color}</span>
+                            (Position: ${button.left}px, ${button.top}px)
+                        </div>
+                        <div class="list-item-actions">
+                            <button class="btn-edit btn-small" onclick="editButton('${button.id}')">Modifier</button>
+                            <button class="btn-danger btn-small" onclick="deleteButton('${button.id}')">Supprimer</button>
+                        </div>
+                    </div>
+                    <div class="list-item-edit">
+                        <div class="edit-form">
+                            <input type="text" id="edit-button-text-${button.id}" value="${button.text}" placeholder="Texte du bouton">
+                            <input type="text" id="edit-button-url-${button.id}" value="${button.url || ''}" placeholder="URL (optionnel)">
+                            <div class="color-picker-wrapper">
+                                <input type="color" id="edit-button-color-${button.id}" value="${button.color}">
+                                <span class="color-preview" id="edit-button-color-preview-${button.id}">${button.color}</span>
+                            </div>
+                            <input type="number" id="edit-button-left-${button.id}" value="${button.left}" placeholder="Position Gauche (px)">
+                            <input type="number" id="edit-button-top-${button.id}" value="${button.top}" placeholder="Position Haut (px)">
+                            <div class="edit-actions">
+                                <button class="btn-primary btn-small" onclick="saveButtonEdit('${button.id}')">Sauvegarder</button>
+                                <button class="btn-danger btn-small" onclick="cancelButtonEdit('${button.id}')">Annuler</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+            updateButtonColorPreviews();
+        }
+
+        function editButton(id) {
+            document.getElementById(`button-item-${id}`).classList.add('editing');
+        }
+
+        function cancelButtonEdit(id) {
+            document.getElementById(`button-item-${id}`).classList.remove('editing');
+        }
+
+        async function saveButtonEdit(id) {
+            const text = document.getElementById(`edit-button-text-${id}`).value;
+            const url = document.getElementById(`edit-button-url-${id}`).value;
+            const color = document.getElementById(`edit-button-color-${id}`).value;
+            const left = parseInt(document.getElementById(`edit-button-left-${id}`).value) || 100;
+            const top = parseInt(document.getElementById(`edit-button-top-${id}`).value) || 100;
+            if (text) {
+                try {
+                    showSyncIndicator('Modification en cours...');
+                    await updateButton(id, text, url, color, left, top);
+                    pageConfig.buttons = await loadButtons();
+                    applyConfig();
+                    updateButtonList();
+                    showSyncIndicator('Bouton modifié', 'success');
+                } catch (error) {
+                    showSyncIndicator('Erreur lors de la modification', 'error');
+                }
+            } else {
+                showSyncIndicator('Veuillez entrer un texte pour le bouton', 'error');
+            }
+        }
+
+        async function deleteButton(id) {
+            if (confirm('Supprimer ce bouton ?')) {
+                try {
+                    showSyncIndicator('Suppression en cours...');
+                    await deleteButtonItem(id);
+                    pageConfig.buttons = await loadButtons();
+                    applyConfig();
+                    updateButtonList();
+                    showSyncIndicator('Bouton supprimé', 'success');
+                } catch (error) {
+                    showSyncIndicator('Erreur lors de la suppression', 'error');
+                }
+            }
+        }
+
+        // Mise à jour des aperçus de couleur
         function updateColorPreviews() {
             document.getElementById('textColorPreview').textContent = document.getElementById('textColor').value;
             document.getElementById('accentColorPreview').textContent = document.getElementById('accentColor').value;
             document.getElementById('bgColorPreview').textContent = document.getElementById('bgColor').value;
+            document.getElementById('navColorPreview').textContent = document.getElementById('navColor').value;
+            document.getElementById('navHoverColorPreview').textContent = document.getElementById('navHoverColor').value;
+            document.getElementById('buttonColorPreview').textContent = document.getElementById('buttonColor').value;
         }
 
-        document.getElementById('textColor').addEventListener('input', function(e) {
-            document.getElementById('textColorPreview').textContent = e.target.value;
+        function updateButtonColorPreviews() {
+            pageConfig.buttons.forEach(button => {
+                const preview = document.getElementById(`edit-button-color-preview-${button.id}`);
+                if (preview) {
+                    preview.textContent = button.color;
+                }
+            });
+        }
+
+        // Écouteurs pour mise à jour des aperçus de couleur
+        document.getElementById('textColor').addEventListener('input', updateColorPreviews);
+        document.getElementById('accentColor').addEventListener('input', updateColorPreviews);
+        document.getElementById('bgColor').addEventListener('input', updateColorPreviews);
+        document.getElementById('navColor').addEventListener('input', updateColorPreviews);
+        document.getElementById('navHoverColor').addEventListener('input', updateColorPreviews);
+        document.getElementById('buttonColor').addEventListener('input', updateColorPreviews);
+
+        // Initialisation
+        document.querySelectorAll('.admin-tab').forEach(tab => {
+            tab.addEventListener('click', () => switchTab(tab.getAttribute('onclick').match(/'([^']+)'/)[1]));
         });
 
-        document.getElementById('accentColor').addEventListener('input', function(e) {
-            document.getElementById('accentColorPreview').textContent = e.target.value;
-        });
-
-        document.getElementById('bgColor').addEventListener('input', function(e) {
-            document.getElementById('bgColorPreview').textContent = e.target.value;
-        });
-
-        // Password input enter key
-        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                checkPassword();
+        // Ajout écouteurs dynamiques pour boutons de couleur des boutons
+        document.addEventListener('input', function(e) {
+            if (e.target.id.startsWith('edit-button-color-')) {
+                const id = e.target.id.replace('edit-button-color-', '');
+                document.getElementById(`edit-button-color-preview-${id}`).textContent = e.target.value;
             }
-        });
-
-        // Initialize on load
-        document.addEventListener('DOMContentLoaded', function() {
-            loadConfig();
         });
     </script>
 </body>
 </html>
+```
+
+### Explications et vérifications
+- **Complétion de `updateVisionList`**: La fonction `updateVisionList` est maintenant complète, affichant la liste des paragraphes de la section Vision avec des options pour modifier ou supprimer chaque paragraphe, en synchronisation avec Supabase.
+- **Gestion des boutons**: Les fonctions pour ajouter, modifier, supprimer et afficher les boutons sont incluses, avec des champs pour le texte, l'URL, la couleur et la position (left, top).
+- **Aperçus de couleur**: Les écouteurs d'événements pour les sélecteurs de couleur mettent à jour les aperçus en temps réel, y compris pour les boutons dynamiques.
+- **Sécurité**: La séquence de clics (4 clics, pause de 1,5 s, 3 clics) et la vérification du mot de passe avec bcrypt sont intactes.
+- **Supabase**: Toutes les données (général, bio, distinctions, vision, navigation, styles, boutons) sont stockées et récupérées via Supabase, avec des fonctions pour charger, ajouter, mettre à jour et supprimer.
+- **Apparence**: Le style CSS reste identique à la version précédente, assurant une apparence pixel-par-pixel conforme.
+- **Responsive Design**: Les styles responsive pour les écrans plus petits (768px et 480px) sont inclus dans le CSS.
+- **UUID**: L'artefact conserve le même UUID (`6f5b1746-8eb3-4713-ab3c-5dd62b4a4bcb`) pour indiquer qu'il s'agit de la continuation du même fichier.
+
+### Notes importantes
+- **Fichier `supabase-config.js`**: Assurez-vous que ce fichier existe dans `/js/supabase-config.js` avec la configuration suivante :
+  ```javascript
+  const supabase = Supabase.createClient('VOTRE_SUPABASE_URL', 'VOTRE_SUPABASE_KEY');
+  ```
+  Remplacez `VOTRE_SUPABASE_URL` et `VOTRE_SUPABASE_KEY` par vos identifiants Supabase.
+- **Structure de la base de données Supabase**:
+  - Table `site_config` : colonnes `id` (int), `config` (jsonb).
+  - Table `navigation_items` : colonnes `id` (text), `text` (text), `url` (text), `active` (boolean), `order` (int).
+  - Table `bio_paragraphs` : colonnes `id` (text), `text` (text), `order` (int).
+  - Table `achievements` : colonnes `id` (text), `year` (text), `desc` (text), `order` (int).
+  - Table `vision_paragraphs` : colonnes `id` (text), `text` (text), `order` (int).
+  - Table `buttons` : colonnes `id` (text), `text` (text), `url` (text), `color` (text), `left` (int), `top` (int).
+  - Bucket `photos` pour le stockage des images.
+
+### Confirmation
+Le fichier `aladine.html` est maintenant complet. Si vous avez besoin d'autres fichiers (comme `supabase-config.js`) ou d'instructions pour configurer Supabase, faites-le-moi savoir !
