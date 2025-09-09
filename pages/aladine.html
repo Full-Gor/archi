@@ -657,18 +657,42 @@
         
         <div class="content">
             <div class="bio">
-                <div id="bio-content"></div>
+                <div id="bio-content">
+                    <p>Fondateur et visionnaire derrière Aladine Atelier, Aladine Mahmoud est un architecte internationalement reconnu dont le travail transcende les conventions traditionnelles de l'architecture.</p>
+                    <p>Né à Beyrouth et formé à l'École Spéciale d'Architecture de Paris, Aladine a développé une approche unique qui marie l'esthétique contemporaine avec les principes durables et les influences culturelles diverses.</p>
+                    <p>Sa philosophie de design s'articule autour de trois principes fondamentaux : la durabilité environnementale, l'intégration culturelle et l'innovation technique. Chacun de ses projets raconte une histoire unique, créant un dialogue entre l'espace, l'environnement et les personnes qui l'habitent.</p>
+                </div>
                 
                 <div class="achievements">
                     <h2 id="achievements-title">Distinctions</h2>
-                    <div id="achievements-list"></div>
+                    <div id="achievements-list">
+                        <div class="achievement">
+                            <div class="achievement-year">2023</div>
+                            <div>Prix Pritzker d'Architecture - Nomination</div>
+                        </div>
+                        <div class="achievement">
+                            <div class="achievement-year">2021</div>
+                            <div>Médaille d'Or de l'Académie d'Architecture</div>
+                        </div>
+                        <div class="achievement">
+                            <div class="achievement-year">2019</div>
+                            <div>Grand Prix AFEX de l'Architecture Française à l'Export</div>
+                        </div>
+                        <div class="achievement">
+                            <div class="achievement-year">2016</div>
+                            <div>Prix Aga Khan d'Architecture</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
             <div class="profile">
                 <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=500&h=600&fit=crop" alt="Architecte travaillant sur des plans" class="profile-image" id="profile-image">
                 <h2 id="vision-title">Vision</h2>
-                <div id="vision-content"></div>
+                <div id="vision-content">
+                    <p>"L'architecture n'est pas simplement l'art de construire des bâtiments, c'est l'art de créer des expériences, de façonner des émotions et de laisser un impact durable sur le monde qui nous entoure. Chaque projet est une opportunité de redéfinir notre relation à l'espace et à l'environnement."</p>
+                    <p>"Je crois fermement que l'architecture a le pouvoir de transformer positivement la vie des gens, de catalyser le changement social et de contribuer à un avenir plus durable pour notre planète."</p>
+                </div>
             </div>
         </div>
 
@@ -987,12 +1011,103 @@
     
     <script>
         // Initialize Supabase when scripts are loaded
+        // Fonction pour afficher le contenu de la page
+        function displayPageContent() {
+            // Afficher la biographie
+            const bioContent = document.getElementById('bio-content');
+            if (bioContent && pageConfig.bio) {
+                bioContent.innerHTML = '';
+                pageConfig.bio.forEach(paragraph => {
+                    const p = document.createElement('p');
+                    p.textContent = paragraph.text;
+                    bioContent.appendChild(p);
+                });
+            }
+
+            // Afficher les distinctions
+            const achievementsList = document.getElementById('achievements-list');
+            const achievementsTitle = document.getElementById('achievements-title');
+            if (achievementsList && pageConfig.achievements) {
+                if (achievementsTitle) {
+                    achievementsTitle.textContent = pageConfig.achievements.title;
+                }
+                achievementsList.innerHTML = '';
+                pageConfig.achievements.items.forEach(achievement => {
+                    const div = document.createElement('div');
+                    div.className = 'achievement';
+                    div.innerHTML = `
+                        <div class="achievement-year">${achievement.year}</div>
+                        <div>${achievement.desc}</div>
+                    `;
+                    achievementsList.appendChild(div);
+                });
+            }
+
+            // Afficher la vision
+            const visionContent = document.getElementById('vision-content');
+            const visionTitle = document.getElementById('vision-title');
+            if (visionContent && pageConfig.vision) {
+                if (visionTitle) {
+                    visionTitle.textContent = pageConfig.vision.title;
+                }
+                visionContent.innerHTML = '';
+                pageConfig.vision.paragraphs.forEach(paragraph => {
+                    const p = document.createElement('p');
+                    p.textContent = paragraph.text;
+                    visionContent.appendChild(p);
+                });
+            }
+
+            // Afficher l'image de profil
+            const profileImage = document.getElementById('profile-image');
+            if (profileImage && pageConfig.general) {
+                profileImage.src = pageConfig.general.profileImage;
+                profileImage.alt = pageConfig.general.profileImageAlt;
+            }
+
+            // Afficher la navigation
+            const navigation = document.querySelector('.navigation');
+            if (navigation && pageConfig.navigation) {
+                navigation.innerHTML = '';
+                pageConfig.navigation.items.forEach(item => {
+                    const a = document.createElement('a');
+                    a.href = item.url;
+                    a.textContent = item.text;
+                    if (item.active) {
+                        a.classList.add('active');
+                    }
+                    navigation.appendChild(a);
+                });
+            }
+        }
+
+        // Fonction pour charger la configuration
+        async function loadPageConfig() {
+            try {
+                // Essayer de charger depuis Supabase
+                const config = await loadSiteConfig();
+                if (config) {
+                    pageConfig = { ...defaultConfig, ...config };
+                }
+            } catch (error) {
+                console.log('Utilisation de la configuration par défaut');
+            }
+            
+            // Afficher le contenu
+            displayPageContent();
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             // Attendre que tous les scripts soient chargés
             setTimeout(() => {
                 if (typeof initSupabase === 'function') {
                     initSupabase();
                 }
+                // Charger et afficher le contenu
+                loadPageConfig();
+                
+                // Ajouter l'événement de clic triple sur le titre
+                setupAdminAccess();
             }, 100);
         });
         
@@ -1558,24 +1673,29 @@
 
         // Séquence d'accès admin
         let clickCount = 0;
-let clickTimer;
+        let clickTimer;
 
-document.getElementById('main-title').addEventListener('click', function(e) {
-    e.preventDefault();
-    clickCount++;
-    
-    if (clickCount === 1) {
-        clickTimer = setTimeout(() => {
-            clickCount = 0;
-        }, 1000); // Reset après 1 seconde
-    }
-    
-    if (clickCount === 3) {
-        clearTimeout(clickTimer);
-        clickCount = 0;
-        openPasswordModal();
-    }
-});
+        function setupAdminAccess() {
+            const logoText = document.getElementById('logo-text');
+            if (logoText) {
+                logoText.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    clickCount++;
+                    
+                    if (clickCount === 1) {
+                        clickTimer = setTimeout(() => {
+                            clickCount = 0;
+                        }, 1000); // Reset après 1 seconde
+                    }
+                    
+                    if (clickCount === 3) {
+                        clearTimeout(clickTimer);
+                        clickCount = 0;
+                        openPasswordModal();
+                    }
+                });
+            }
+        }
             // Gestion upload image profil
             document.getElementById('profileImageFile').addEventListener('change', async function(e) {
                 const file = e.target.files[0];
@@ -2312,32 +2432,3 @@ document.getElementById('main-title').addEventListener('click', function(e) {
     </script>
 </body>
 </html>
-```
-
-### Explications et vérifications
-- **Complétion de `updateVisionList`**: La fonction `updateVisionList` est maintenant complète, affichant la liste des paragraphes de la section Vision avec des options pour modifier ou supprimer chaque paragraphe, en synchronisation avec Supabase.
-- **Gestion des boutons**: Les fonctions pour ajouter, modifier, supprimer et afficher les boutons sont incluses, avec des champs pour le texte, l'URL, la couleur et la position (left, top).
-- **Aperçus de couleur**: Les écouteurs d'événements pour les sélecteurs de couleur mettent à jour les aperçus en temps réel, y compris pour les boutons dynamiques.
-- **Sécurité**: La séquence de clics (4 clics, pause de 1,5 s, 3 clics) et la vérification du mot de passe avec bcrypt sont intactes.
-- **Supabase**: Toutes les données (général, bio, distinctions, vision, navigation, styles, boutons) sont stockées et récupérées via Supabase, avec des fonctions pour charger, ajouter, mettre à jour et supprimer.
-- **Apparence**: Le style CSS reste identique à la version précédente, assurant une apparence pixel-par-pixel conforme.
-- **Responsive Design**: Les styles responsive pour les écrans plus petits (768px et 480px) sont inclus dans le CSS.
-- **UUID**: L'artefact conserve le même UUID (`6f5b1746-8eb3-4713-ab3c-5dd62b4a4bcb`) pour indiquer qu'il s'agit de la continuation du même fichier.
-
-### Notes importantes
-- **Fichier `supabase-config.js`**: Assurez-vous que ce fichier existe dans `/js/supabase-config.js` avec la configuration suivante :
-  ```javascript
-  const supabase = Supabase.createClient('VOTRE_SUPABASE_URL', 'VOTRE_SUPABASE_KEY');
-  ```
-  Remplacez `VOTRE_SUPABASE_URL` et `VOTRE_SUPABASE_KEY` par vos identifiants Supabase.
-- **Structure de la base de données Supabase**:
-  - Table `site_config` : colonnes `id` (int), `config` (jsonb).
-  - Table `navigation_items` : colonnes `id` (text), `text` (text), `url` (text), `active` (boolean), `order` (int).
-  - Table `bio_paragraphs` : colonnes `id` (text), `text` (text), `order` (int).
-  - Table `achievements` : colonnes `id` (text), `year` (text), `desc` (text), `order` (int).
-  - Table `vision_paragraphs` : colonnes `id` (text), `text` (text), `order` (int).
-  - Table `buttons` : colonnes `id` (text), `text` (text), `url` (text), `color` (text), `left` (int), `top` (int).
-  - Bucket `photos` pour le stockage des images.
-
-### Confirmation
-Le fichier `aladine.html` est maintenant complet. Si vous avez besoin d'autres fichiers (comme `supabase-config.js`) ou d'instructions pour configurer Supabase, faites-le-moi savoir !
