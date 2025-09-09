@@ -1201,9 +1201,19 @@
         // Supabase Functions
         async function loadSiteConfig() {
             try {
-                const { data, error } = await supabase.from('site_config').select('*').eq('id', 1).single();
+                const { data, error } = await supabase.from('site_config').select('*');
                 if (error) throw error;
-                return data.config;
+                
+                // Convertir les données en objet config
+                const config = {};
+                data.forEach(item => {
+                    try {
+                        config[item.key] = typeof item.value === 'string' ? JSON.parse(item.value) : item.value;
+                    } catch (e) {
+                        config[item.key] = item.value;
+                    }
+                });
+                return config;
             } catch (error) {
                 console.error('Error loading config:', error);
                 return null;
@@ -1212,15 +1222,14 @@
 
         async function saveSiteConfig(key, value) {
             try {
-                const { data, error } = await supabase.from('site_config').select('*').eq('id', 1).single();
-                if (error && error.code !== 'PGRST116') throw error;
-
-                let config = data ? data.config : {};
-                config[key] = value;
-
-                const { error: updateError } = await supabase.from('site_config')
-                    .upsert({ id: 1, config }, { onConflict: 'id' });
-                if (updateError) throw updateError;
+                const { error } = await supabase.from('site_config')
+                    .upsert({ 
+                        key: key, 
+                        value: typeof value === 'object' ? JSON.stringify(value) : value 
+                    }, { 
+                        onConflict: 'key' 
+                    });
+                if (error) throw error;
             } catch (error) {
                 console.error('Error saving config:', error);
                 showSyncIndicator('Erreur lors de la sauvegarde', 'error');
