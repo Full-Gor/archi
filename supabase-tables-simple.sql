@@ -54,7 +54,9 @@ ALTER TABLE buttons DISABLE ROW LEVEL SECURITY;
 -- Insérer des données de test
 INSERT INTO site_config (key, value) VALUES 
 ('title', '{"text": "Aladine Atelier", "font": "Arial", "size": 3, "color": "#ffffff", "left": 50, "top": 50}'),
-('navigation', '{"font": "Arial", "size": 0.75, "color": "#ffffff", "hoverColor": "#d4af37"}');
+('navigation', '{"font": "Arial", "size": 0.75, "color": "#ffffff", "hoverColor": "#d4af37"}'),
+('admin_tabs', '{"tabs": ["title", "images", "navigation", "buttons"], "active": "title"}'),
+('admin_config', '{"password": "aladine123", "theme": "dark", "autoSave": true}');
 
 INSERT INTO images (id, url, alt, "order") VALUES 
 ('img1', 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=1920', 'Bureau moderne', 0),

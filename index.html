@@ -14,16 +14,16 @@
     <script src="/js/supabase-config.js"></script>
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Megrim&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Barcode+39+Text&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Almendra:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Megrim&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Barcode+39+Text&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
     
     <style>
         * {
@@ -783,22 +783,22 @@
                 <div class="form-group">
                     <label>Police de navigation</label>
                     <select id="navFont">
-                        <option value="Arial">Arial (Classique)</option>
-                        <option value="Georgia">Georgia (Élégant)</option>
-                        <option value="Times New Roman">Times New Roman (Traditionnel)</option>
-                        <option value="Courier New">Courier New (Machine à écrire)</option>
-                        <option value="Verdana">Verdana (Moderne)</option>
-                        <option value="UnifrakturMaguntia">UnifrakturMaguntia (Gothique)</option>
-                        <option value="Cinzel">Cinzel (Renaissance)</option>
-                        <option value="Almendra">Almendra (Médiéval)</option>
-                        <option value="Orbitron">Orbitron (Cyberpunk)</option>
-                        <option value="Audiowide">Audiowide (Tech)</option>
-                        <option value="Megrim">Megrim (Néon)</option>
-                        <option value="Bungee">Bungee (Arcade)</option>
-                        <option value="Pirata One">Pirata One (Pirate)</option>
-                        <option value="Monoton">Monoton (Rétro Néon)</option>
-                        <option value="Libre Barcode 39 Text">Libre Barcode (Code-barres)</option>
-                    </select>
+    <option value="Arial">Arial (Classique)</option>
+    <option value="Georgia">Georgia (Élégant)</option>
+    <option value="Times New Roman">Times New Roman (Traditionnel)</option>
+    <option value="Courier New">Courier New (Machine à écrire)</option>
+    <option value="Verdana">Verdana (Moderne)</option>
+    <option value="UnifrakturMaguntia">UnifrakturMaguntia (Gothique)</option>
+    <option value="Cinzel">Cinzel (Renaissance)</option>
+    <option value="Almendra">Almendra (Médiéval)</option>
+    <option value="Orbitron">Orbitron (Cyberpunk)</option>
+    <option value="Audiowide">Audiowide (Tech)</option>
+    <option value="Megrim">Megrim (Néon)</option>
+    <option value="Bungee">Bungee (Arcade)</option>
+    <option value="Pirata One">Pirata One (Pirate)</option>
+    <option value="Monoton">Monoton (Rétro Néon)</option>
+    <option value="Libre Barcode 39 Text">Libre Barcode (Code-barres)</option>
+</select>
                 </div>
                 <div class="form-group">
                     <label>Taille (rem)</label>
@@ -818,7 +818,7 @@
                         <span class="color-preview" id="navHoverColorPreview">#d4af37</span>
                     </div>
                 </div>
-                <button class="btn-primary" onclick="addNavItem()">Ajouter Lien</button>
+                <button class="btn-primary" onclick="addNavItemToSite()">Ajouter Lien</button>
                 <button class="btn-primary" onclick="saveNavStyle()">Sauvegarder Style</button>
                 
                 <div class="nav-list" id="navList">
@@ -842,7 +842,7 @@
                     <div class="color-picker-wrapper">
                         <input type="color" id="buttonColor" value="#d4af37" />
                         <span class="color-preview" id="buttonColorPreview">#d4af37</span>
-                    </div>
+                </div>
                 </div>
                 <div class="form-group">
                     <label>Position Gauche (px)</label>
@@ -930,10 +930,21 @@
                 if (config) {
                     console.log('Config chargée depuis Supabase:', config);
                     // Appliquer la configuration chargée
-                    Object.assign(siteConfig, config);
+                    if (config.title) siteConfig.title = config.title;
+                    if (config.navigation) siteConfig.navigation = config.navigation;
+                    
+                    // Charger les données dynamiques
+                    siteConfig.images = await loadImages();
+                    siteConfig.navigation.items = await loadNavigationItems();
+                    siteConfig.buttons = await loadButtons();
+                    
                     applyConfig();
                 } else {
                     console.log('Aucune config trouvée, utilisation des valeurs par défaut');
+                    // Charger les données par défaut depuis Supabase
+                    siteConfig.images = await loadImages();
+                    siteConfig.navigation.items = await loadNavigationItems();
+                    siteConfig.buttons = await loadButtons();
                     applyConfig();
                 }
             } catch (err) {
@@ -1039,24 +1050,24 @@
 
         // Séquence d'accès admin
         let clickCount = 0;
-let clickTimer;
+        let clickTimer;
 
 document.getElementById('main-title').addEventListener('click', function(e) {
-    e.preventDefault();
-    clickCount++;
-    
-    if (clickCount === 1) {
-        clickTimer = setTimeout(() => {
-            clickCount = 0;
+                e.preventDefault();
+                clickCount++;
+                
+                if (clickCount === 1) {
+                    clickTimer = setTimeout(() => {
+                        clickCount = 0;
         }, 1000); // Reset après 1 seconde
-    }
-    
-    if (clickCount === 3) {
-        clearTimeout(clickTimer);
-        clickCount = 0;
-        openPasswordModal();
-    }
-});
+                }
+                
+                if (clickCount === 3) {
+                    clearTimeout(clickTimer);
+                    clickCount = 0;
+                    openPasswordModal();
+                }
+            });
 
             // Gestion upload fichier
             document.getElementById('imageFile').addEventListener('change', async function(e) {
@@ -1115,15 +1126,15 @@ document.getElementById('main-title').addEventListener('click', function(e) {
         }
 
         function checkPassword() {
-    const password = document.getElementById('passwordInput').value;
+            const password = document.getElementById('passwordInput').value;
     if (password === 'aladine123') {  // Simple pour tester
-        closePasswordModal();
-        openAdminPanel();
-    } else {
-        alert('Mot de passe incorrect');
-        document.getElementById('passwordInput').value = '';
-    }
-}
+                closePasswordModal();
+                openAdminPanel();
+            } else {
+                alert('Mot de passe incorrect');
+                document.getElementById('passwordInput').value = '';
+            }
+        }
 
         function openAdminPanel() {
             document.getElementById('adminModal').classList.add('show');
@@ -1202,11 +1213,11 @@ document.getElementById('main-title').addEventListener('click', function(e) {
                 const success = await window.addImage(url, alt, siteConfig.images.length);
                 if (success) {
                     siteConfig.images = await loadImages();
-                    applyConfig();
-                    updateImageList();
-                    document.getElementById('imageUrl').value = '';
-                    document.getElementById('imageAlt').value = '';
-                    document.getElementById('imageFile').value = '';
+                applyConfig();
+                updateImageList();
+                document.getElementById('imageUrl').value = '';
+                document.getElementById('imageAlt').value = '';
+                document.getElementById('imageFile').value = '';
                     showSyncIndicator('Image ajoutée', 'success');
                 } else {
                     showSyncIndicator('Erreur ajout image', 'error');
@@ -1280,17 +1291,21 @@ document.getElementById('main-title').addEventListener('click', function(e) {
         }
 
         // Fonctions navigation
-        async function addNavItem() {
+        async function addNavItemToSite() {
             const text = document.getElementById('navText').value;
             const url = document.getElementById('navUrl').value;
             if (text && url) {
-                await addNavItem(text, url, siteConfig.navigation.items.length);
-                siteConfig.navigation.items = await loadNavigationItems();
-                applyConfig();
-                updateNavList();
-                document.getElementById('navText').value = '';
-                document.getElementById('navUrl').value = '';
-                showSyncIndicator('Lien ajouté', 'success');
+                const success = await window.addNavItem(text, url, siteConfig.navigation.items.length);
+                if (success) {
+                    siteConfig.navigation.items = await loadNavigationItems();
+                    applyConfig();
+                    updateNavList();
+                    document.getElementById('navText').value = '';
+                    document.getElementById('navUrl').value = '';
+                    showSyncIndicator('Lien ajouté', 'success');
+                } else {
+                    showSyncIndicator('Erreur ajout lien', 'error');
+                }
             }
         }
 
