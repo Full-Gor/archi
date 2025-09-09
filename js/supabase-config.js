@@ -3,15 +3,21 @@ let supabase = null;
 
 // Fonction d'initialisation
 function initSupabase() {
-    if (typeof window.supabase !== 'undefined') {
-        const { createClient } = window.supabase;
-        supabase = createClient(
-            'https://uychwicukidatfvfhumb.supabase.co',
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5Y2h3aWN1a2lkYXRmdmZodW1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0MTczMzMsImV4cCI6MjA3Mjk5MzMzM30.1QSjZ1cd3w7CBKrBqKrydJygkE2lPUglKa6hg-05do4'
-        );
-        return true;
+    if (typeof window.supabase !== 'undefined' && !supabase) {
+        try {
+            const { createClient } = window.supabase;
+            supabase = createClient(
+                'https://uychwicukidatfvfhumb.supabase.co',
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5Y2h3aWN1a2lkYXRmdmZodW1iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0MTczMzMsImV4cCI6MjA3Mjk5MzMzM30.1QSjZ1cd3w7CBKrBqKrydJygkE2lPUglKa6hg-05do4'
+            );
+            console.log('Supabase initialisé avec succès');
+            return true;
+        } catch (error) {
+            console.error('Erreur initialisation Supabase:', error);
+            return false;
+        }
     }
-    return false;
+    return supabase !== null;
 }
 
 // Vérifier si Supabase est disponible
@@ -24,16 +30,37 @@ async function loadSiteConfig() {
         console.warn('Supabase non initialisé');
         return null;
     }
-    const { data, error } = await supabase.from('site_config').select('*');
-    if (error) {
-        console.error('Erreur chargement config:', error);
+    try {
+        const { data, error } = await supabase.from('site_config').select('*');
+        if (error) {
+            console.error('Erreur chargement config:', error);
+            return null;
+        }
+        
+        if (!data || data.length === 0) {
+            console.log('Aucune configuration trouvée');
+            return null;
+        }
+        
+        const config = {};
+        data.forEach(item => {
+            try {
+                // Vérifier si item.value est déjà un objet ou une chaîne
+                if (typeof item.value === 'string') {
+                    config[item.key] = JSON.parse(item.value);
+                } else {
+                    config[item.key] = item.value;
+                }
+            } catch (parseError) {
+                console.error(`Erreur parsing pour ${item.key}:`, parseError);
+                config[item.key] = item.value; // Utiliser la valeur brute
+            }
+        });
+        return config;
+    } catch (err) {
+        console.error('Erreur lors du chargement de la config:', err);
         return null;
     }
-    const config = {};
-    data.forEach(item => {
-        config[item.key] = JSON.parse(item.value);
-    });
-    return config;
 }
 
 async function saveSiteConfig(key, value) {

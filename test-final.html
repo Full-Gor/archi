@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Final - Aladine Atelier</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .test-section {
+            background: #2d2d2d;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .warning { color: #ff9800; }
+        button {
+            background: #d4af37;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #b8941f;
+        }
+        pre {
+            background: #333;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            max-height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Final - Aladine Atelier</h1>
+    
+    <div class="test-section">
+        <h2>1. Test d'initialisation</h2>
+        <button onclick="testInit()">Tester l'initialisation</button>
+        <div id="init-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. Test de sauvegarde et chargement</h2>
+        <button onclick="testSaveLoad()">Tester sauvegarde/chargement</button>
+        <div id="save-load-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Test des données réelles</h2>
+        <button onclick="testRealData()">Tester avec données réelles</button>
+        <div id="real-data-result"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/supabase-config.js"></script>
+    
+    <script>
+        function log(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            const className = type === 'success' ? 'success' : type === 'error' ? 'error' : type === 'warning' ? 'warning' : '';
+            element.innerHTML += `<div class="${className}">${new Date().toLocaleTimeString()}: ${message}</div>`;
+        }
+        
+        function clear(elementId) {
+            document.getElementById(elementId).innerHTML = '';
+        }
+        
+        async function testInit() {
+            clear('init-result');
+            log('init-result', 'Test d\'initialisation...');
+            
+            if (typeof initSupabase === 'function') {
+                const success = initSupabase();
+                if (success) {
+                    log('init-result', '✅ Supabase initialisé avec succès', 'success');
+                    log('init-result', `État: ${isSupabaseReady() ? 'Prêt' : 'Non prêt'}`, isSupabaseReady() ? 'success' : 'warning');
+                } else {
+                    log('init-result', '❌ Échec de l\'initialisation', 'error');
+                }
+            } else {
+                log('init-result', '❌ Fonction initSupabase non trouvée', 'error');
+            }
+        }
+        
+        async function testSaveLoad() {
+            clear('save-load-result');
+            log('save-load-result', 'Test de sauvegarde et chargement...');
+            
+            try {
+                // Test de sauvegarde
+                const testData = {
+                    test: 'Données de test',
+                    timestamp: new Date().toISOString(),
+                    number: 42
+                };
+                
+                log('save-load-result', 'Sauvegarde des données de test...');
+                const saveSuccess = await saveSiteConfig('test', testData);
+                
+                if (saveSuccess) {
+                    log('save-load-result', '✅ Sauvegarde réussie', 'success');
+                    
+                    // Attendre un peu
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    
+                    // Test de chargement
+                    log('save-load-result', 'Chargement des données...');
+                    const loadedConfig = await loadSiteConfig();
+                    
+                    if (loadedConfig && loadedConfig.test) {
+                        log('save-load-result', '✅ Chargement réussi', 'success');
+                        log('save-load-result', `<pre>${JSON.stringify(loadedConfig.test, null, 2)}</pre>`);
+                        
+                        // Vérifier l'intégrité des données
+                        if (loadedConfig.test.test === testData.test && 
+                            loadedConfig.test.number === testData.number) {
+                            log('save-load-result', '✅ Intégrité des données vérifiée', 'success');
+                        } else {
+                            log('save-load-result', '❌ Données corrompues', 'error');
+                        }
+                    } else {
+                        log('save-load-result', '❌ Impossible de charger les données', 'error');
+                    }
+                } else {
+                    log('save-load-result', '❌ Échec de la sauvegarde', 'error');
+                }
+            } catch (error) {
+                log('save-load-result', `❌ Erreur: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testRealData() {
+            clear('real-data-result');
+            log('real-data-result', 'Test avec données réelles...');
+            
+            try {
+                // Test avec des données de titre
+                const titleData = {
+                    text: 'Aladine Atelier - Test',
+                    font: 'Arial',
+                    size: 3.5,
+                    color: '#ff0000',
+                    left: 100,
+                    top: 100
+                };
+                
+                log('real-data-result', 'Sauvegarde du titre...');
+                const saveSuccess = await saveSiteConfig('title', titleData);
+                
+                if (saveSuccess) {
+                    log('real-data-result', '✅ Titre sauvegardé', 'success');
+                    
+                    // Attendre un peu
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    
+                    // Charger et vérifier
+                    const config = await loadSiteConfig();
+                    if (config && config.title) {
+                        log('real-data-result', '✅ Titre chargé', 'success');
+                        log('real-data-result', `<pre>${JSON.stringify(config.title, null, 2)}</pre>`);
+                        
+                        if (config.title.text === titleData.text) {
+                            log('real-data-result', '✅ Données persistantes confirmées', 'success');
+                        } else {
+                            log('real-data-result', '❌ Données non persistantes', 'error');
+                        }
+                    } else {
+                        log('real-data-result', '❌ Impossible de charger le titre', 'error');
+                    }
+                } else {
+                    log('real-data-result', '❌ Échec de sauvegarde du titre', 'error');
+                }
+            } catch (error) {
+                log('real-data-result', `❌ Erreur: ${error.message}`, 'error');
+            }
+        }
+        
+        // Auto-test au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                testInit();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

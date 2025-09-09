@@ -988,9 +988,12 @@
     <script>
         // Initialize Supabase when scripts are loaded
         document.addEventListener('DOMContentLoaded', function() {
-            if (typeof initSupabase === 'function') {
-                initSupabase();
-            }
+            // Attendre que tous les scripts soient chargés
+            setTimeout(() => {
+                if (typeof initSupabase === 'function') {
+                    initSupabase();
+                }
+            }, 100);
         });
         
         // Hash bcrypt (même que index.html)

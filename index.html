@@ -864,13 +864,16 @@
     <script>
         // Initialize Supabase when scripts are loaded
         document.addEventListener('DOMContentLoaded', function() {
-            if (typeof initSupabase === 'function') {
-                initSupabase();
-            }
-            // Charger la configuration après un court délai
+            // Attendre que tous les scripts soient chargés
             setTimeout(() => {
-                loadConfig();
-            }, 500);
+                if (typeof initSupabase === 'function') {
+                    initSupabase();
+                }
+                // Charger la configuration après initialisation
+                setTimeout(() => {
+                    loadConfig();
+                }, 200);
+            }, 100);
         });
         
         // Hash bcrypt pour mot de passe (généré hors ligne pour "xY9$kPq2mW8vZ3jL")
